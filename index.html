@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex, nofollow">
+<title>김지태 · Valeria, 결혼합니다</title>
+<meta name="description" content="2027년 2월 13일 토요일 오후 6시 30분 · 토브헤세드">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jtk07111-create.github.io/wedding-invitation-live/">
+<meta property="og:title" content="김지태 · Valeria, 결혼합니다">
+<meta property="og:description" content="2027년 2월 13일 토요일 오후 6시 30분 · 토브헤세드">
+<meta property="og:image" content="https://jtk07111-create.github.io/wedding-invitation-live/images/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aboreto&family=Montserrat:wght@300;400&family=Newsreader:opsz,wght@6..72,300&family=Noto+Serif+KR:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&text=%F0%93%81%87%F0%93%81%8B&display=swap">
+
+<script>
+/* ==================================================================
+   청첩장 정보 — 이 블록만 고치면 화면 전체가 바뀝니다.
+   더뉴챕터 편집 화면(2026-09-27)의 내용을 그대로 옮겨 온 값입니다.
+   ================================================================== */
+window.WEDDING = {
+  draft: false,  // true면 사진이 없는 칸에 "Photo" 자리를 보여 주고 음악 버튼을 띄운다 (시안 확인용)
+
+  invited: "You're Invited to the Wedding of",
+  groom: { name: '김지태', en: 'Jitae', relation: '아들', parents: ['김종헌', '공미라'] },
+  // parentsBreak: 두 분 성함 사이(· 다음)에서 줄을 바꾼다
+  bride: { name: '발레리아', en: 'Valeria', relation: '딸', parents: ['Jose Alfredo Tomaylla Villafuerte', 'Aquilina Cristina Chipao Tintaya'], parentsBreak: true },
+  date: '2027-02-13T18:30:00+09:00',   // 한국 시간
+
+  greeting: 'With joyful hearts, we ask you to share in the celebration of our love.',
+  greetingKo: '저희의 사랑을 축하하는 자리에 기쁜 마음으로,\n함께해 주시면 감사하겠습니다.',   // 인사말 아래 작은 한글 번역
+
+  playlist: {
+    title: 'Wedding playlist ♬',
+    songs: [
+      'STARS - ¥$',
+      'Nobody New - The Marías',
+      'MAMA’S FAVORITE - Ye',
+      'BIRDS OF A FEATHER - Billie Eilish',
+      'Reborn - KIDS SEE GHOSTS',
+      'Honeybee - Olivia Rodrigo',
+      'Ghost Town - Kanye West',
+      'Party 4 U - Charli xcx',
+      'I Thought I Saw Your Face Today - She & Him',
+    ],
+    more: 'and more',
+  },
+
+  gallery: { title: 'Beautiful Days', show: 6 },
+
+  venue: {
+    name: '토브헤세드 Tov Hesed',
+    address: '서울 강남구 도산대로38길 32',
+    tel: '02-516-2300',   // 예식장 공식 대표번호 (tovhesed.com)
+    // 예식장 사진 (가로 80%, 가운데 정렬). photoAt: 'top' = THE VENUE 바로 아래, 'map' = 지도 바로 위
+    photo: 'images/venue.jpg',
+    photoAlt: '토브헤세드 예식홀 내부',
+    photoAt: 'top',
+    // 약도 이미지. 비워 두면 원본 편집 화면처럼 MAP PREVIEW 자리만 보인다
+    mapImage: 'images/map.png',
+    mapAlt: '토브헤세드 약도. 7호선 학동역 10번 출구에서 도보 약 10분',
+    // 세 링크 모두 '토브헤세드' 장소로 바로 열린다 (2026-09-27 확인)
+    maps: [
+      // en = 버튼 아래 줄 영어 이름 (외국인 하객용)
+      { label: '네이버 지도', en: 'Naver Map', url: 'https://map.naver.com/p/entry/place/1750816468' },
+      // 예식장 홈페이지의 길찾기 좌표(WGS84)에 '토브헤세드' 표시
+      { label: '카카오맵', en: 'Kakao Map', url: 'https://map.kakao.com/link/map/%ED%86%A0%EB%B8%8C%ED%97%A4%EC%84%B8%EB%93%9C,37.518609116709285,127.03270458882795' },
+      { label: '구글 지도', en: 'Google Maps', url: 'https://maps.google.com/?cid=2270952714906935995' },
+    ],
+    // 지도 버튼 아래 영어 안내 (외국인 하객용)
+    mapTip: 'Tip: Naver Map gives the most reliable directions in Korea,\nand you can switch it to English in the app settings.',
+  },
+  // en / enText = 한국어 아래에 붙는 영어 안내 (외국인 하객용)
+  ways: [
+    { title: '지하철', text: '이용 노선: 7호선 학동역 이용\n출구: 10번 출구 (서울세관 방면)',
+      en: 'Subway', enText: 'Line 7, Hakdong Station\nExit 10 (toward Seoul Customs)' },
+    { title: '주차 안내', text: '웨딩홀 인근 주차장 (우미각 등) 별도 안내',
+      en: 'Parking', enText: 'Nearby parking lots (such as Umigak)\nDetails will be shared separately' },
+    { title: '도보', text: '도보: 학동역에서 10분 소요',
+      en: 'On Foot', enText: 'About 10 minutes from Hakdong Station' },
+    { title: '셔틀버스 이용', text: '탑승 위치: 학동역 10번 출구 바로 앞\n운행 간격: 예식 당일 주말 기준 약 10분 간격으로 운행',
+      en: 'Shuttle Bus', enText: 'Pick-up: right outside Exit 10, Hakdong Station\nRuns about every 10 minutes on the wedding day' },
+  ],
+
+  // 미국식 축의금(Registry). 계좌 펼침 목록 아래에 별도 파트로 늘 보인다.
+  // 버튼 → 금액 고르기 → Gift it! → PayPal이 그 금액을 채운 채로 열린다 (예: paypal.me/jtk111/100USD)
+  registry: {
+    label: 'Registry',
+    title: 'Honeymoon Fund',
+    text: "Having you with us is the greatest gift. If you'd like to add to our honeymoon, we'd be truly grateful.",
+    paypal: 'https://www.paypal.me/jtk111',
+    // REGISTRY 제목과 Honeymoon Fund 버튼 사이 이미지 (정사각형, 가운데)
+    image: 'images/thanks.jpg',
+    imageAlt: 'Two bunny plushies dressed as a bride and groom, with the words Thank You',
+    currency: 'USD',
+    amounts: [50, 100, 200, 300],
+  },
+
+  accountLead: '마음 전하실 곳',
+  accounts: {
+    groom: [
+      { name: '김지태', bank: '기업은행', number: '563-029080-01-012' },
+      { name: '김종헌', bank: '씨티은행', number: '139-53470-262' },
+      { name: '공미라', bank: '국민은행', number: '438901-01-020083' },
+    ],
+    bride: [
+      { name: 'TomayllaC', bank: '우리은행', number: '1002-364-187227' },
+    ],
+  },
+
+  share: {
+    text: '소중한 분들에게 전해주세요',
+    // 카카오톡 등으로 링크를 보낼 때 뜨는 제목과 설명 (build.py가 배포본 머리말에도 넣는다)
+    title: '김지태 · Valeria, 결혼합니다',
+    description: '2027년 2월 13일 토요일 오후 6시 30분 · 토브헤세드',
+    image: 'images/og.jpg',   // 링크 미리보기 사진 (1200×630, 표지 사진에서 두 사람 중심으로 잘라 냄)
+    url: 'https://jtk07111-create.github.io/wedding-invitation-live/',   // QR 코드가 연결된 주소
+  },
+
+  photos: {
+    cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
+    // 플레이리스트 배경 (흐리게 처리됨). 따로 고르지 않아 갤러리 6번째 사진을 썼다. pos = 보일 위치
+    playlist: { src: 'images/thumb/g06.jpg', pos: '100% 50%' },
+    // 갤러리: 칸에는 작은 사진(thumb), 누르면 원본(src)이 화면 가득 뜬다.
+    // pos = 세로 칸 안에서 보일 위치. 가로 사진에서 얼굴이 잘리지 않게 맞춘 값
+    gallery: [
+      { src: 'images/g01.jpg', thumb: 'images/thumb/g01.jpg' },
+      { src: 'images/g02.jpg', thumb: 'images/thumb/g02.jpg' },
+      { src: 'images/g03.jpg', thumb: 'images/thumb/g03.jpg' },
+      { src: 'images/g04.jpg', thumb: 'images/thumb/g04.jpg' },
+      { src: 'images/g05.jpg', thumb: 'images/thumb/g05.jpg', pos: '50% 50%' },
+      { src: 'images/g06.jpg', thumb: 'images/thumb/g06.jpg', pos: '76% 50%' },
+    ],
+  },
+  bgm: '',          // 배경음악 mp3 경로. 사용 권한이 있는 음원만
+};
+</script>
+
+<style>
+@font-face { font-family: "SunBatang"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Light.woff") format("woff"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "SunBatang"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Medium.woff") format("woff"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "SunBatang"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+/* Ortica Linear Light — Collletttivo 공식 저장소, SIL OFL 1.1 (fonts/Ortica-OFL.txt) */
+@font-face { font-family: "Ortica Linear"; src: url("fonts/OrticaLinear-Light.woff2") format("woff2"); font-weight: 300; font-display: swap; }
+
+:root {
+  --orange: #ff630f;
+  --black: #111111;
+  --black-2: #0a0a0a;
+  --paper: #d4cfc8;
+  --peach: #ffbea8;
+  --sunday: #f87171;
+  --dot: #c8c2b8;
+  --cream: #f4f2ed;
+  --backdrop: #000000;
+  --f-display: "Ortica Linear", "Newsreader", "SunBatang", "Noto Serif KR", serif;
+  --f-caps: "Aboreto", "SunBatang", "Noto Serif KR", serif;
+  --f-body: "SunBatang", "Noto Serif KR", serif;
+  --f-num: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --f-glyph: "Segoe UI Historic", "Noto Sans Egyptian Hieroglyphs", sans-serif;
+  --gutter: 21px;
+  --col: 430px;
+  color-scheme: only light;
+}
+
+[hidden] { display: none !important; }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--backdrop);
+  color: var(--paper);
+  font-family: var(--f-body);
+  font-weight: 300;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+p, h1, h2, h3, h4, h5, ol, ul, figure { margin: 0; padding: 0; }
+img { max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 1px solid var(--peach); outline-offset: 3px; }
+
+.stage { position: relative; max-width: var(--col); margin: 0 auto; background: var(--black); overflow: hidden; }
+
+/* 공통 라벨 (THE VENUE, ACCOUNT …) */
+.label {
+  font-family: var(--f-caps);
+  font-size: 10px;
+  line-height: 15px;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--peach);
+  text-align: right;
+}
+
+/* 상단 막대 */
+.bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  max-width: var(--col); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: calc(46px + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 17px 0 21px;
+  color: var(--peach);
+  background: rgba(255, 99, 15, 0);
+  transition: background-color .3s cubic-bezier(.4, 0, .2, 1), color .3s cubic-bezier(.4, 0, .2, 1);
+}
+.bar.is-solid { background: rgba(255, 99, 15, .95); color: #000; }
+.bar__mark { font-family: var(--f-glyph); font-size: 12.25px; line-height: 17px; letter-spacing: .025em; white-space: nowrap; }
+.bar__btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+.bar__btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
+
+/* 표지 */
+.cover { background: var(--orange); color: #000; padding: 70px 0; }
+.cover__text { padding: 0 var(--gutter); container-type: inline-size; }
+.invited { font-family: var(--f-caps); font-size: 10.5px; line-height: 14px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; }
+/* 원본처럼 화면 폭에 맞춰 이름 크기가 변한다 (지원하지 않는 브라우저는 36.8px) */
+.names { margin-top: 11px; font-family: var(--f-display); font-size: 36.8px; font-size: clamp(12.47px, 11.583cqi, 37.42px); line-height: 1; font-weight: 300; letter-spacing: -0.025em; }
+.names .amp { margin: 0 .3em; font-family: var(--f-caps); font-size: .5em; line-height: 1; font-weight: 400; letter-spacing: 0; }
+.cover__meta { margin-top: 24px; opacity: .6; }
+.meta { font-size: 11.375px; line-height: 17px; font-weight: 400; letter-spacing: .01em; }
+.meta + .meta { margin-top: 7px; }
+.cover__photo { position: relative; margin-top: 35px; overflow: hidden; background: var(--cream); }
+.cover__photo::before { content: ""; display: block; padding-top: 116.667%; }
+.cover__photo > img, .cover__photo > .ph { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.cover__photo > img { object-fit: cover; }
+.ph { display: flex; align-items: center; justify-content: center; background: var(--cream); color: #b3ada3; font-family: var(--f-display); font-style: italic; font-size: 12px; }
+
+/* 인사말 + 혼주 */
+.intro { padding: 70px var(--gutter) 26px; }
+.greeting { font-family: var(--f-display); font-size: 26.25px; line-height: 1.375; font-weight: 300; letter-spacing: -0.04em; text-align: right; }
+.greeting__ko { margin-top: 14px; font-size: 12px; line-height: 21px; font-weight: 300; opacity: .7; text-align: right; }
+.people { margin-top: 157px; text-align: right; }
+.person + .person { margin-top: 17px; }
+.person__name { font-size: 11.9px; line-height: 21px; font-weight: 400; }
+.person__name b { margin-left: 7px; font-size: 14px; font-weight: 700; }
+.person__parents { margin-top: 3px; font-size: 11.9px; line-height: 17.5px; font-weight: 400; }
+
+/* 플레이리스트 */
+.playlist { position: relative; min-height: 480px; overflow: hidden; color: #fff; background: #5a554f; }
+.playlist__bg { position: absolute; top: -14px; right: -14px; bottom: -14px; left: -14px; background: #5a554f; filter: blur(3px); }
+.playlist__bg img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.playlist__shade { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0, 0, 0, .4); }
+.playlist__body { position: relative; padding: 98px var(--gutter) 38px; text-align: right; }
+.playlist .label { color: rgba(255, 255, 255, .7); }
+.songs { margin-top: 21px; list-style: none; font-size: 12.25px; line-height: 28px; font-weight: 300; }
+.songs__more { margin-top: 28px; font-size: 12.25px; line-height: 28px; font-weight: 300; }
+
+/* 달력 */
+.cal { padding: 100px var(--gutter) 70px; text-align: right; }
+.cal__date { font-family: var(--f-display); font-size: 26.25px; line-height: 31.5px; font-weight: 300; letter-spacing: -0.04em; }
+.cal__time { margin-top: 11px; font-size: 14px; line-height: 21px; font-weight: 500; }
+.cal__en { margin-top: 6px; font-size: 11.5px; line-height: 18px; font-weight: 300; opacity: .7; }
+.cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 44.5px; margin-top: 45px; font-family: var(--f-display); font-size: 13.65px; font-weight: 300; letter-spacing: -0.04em; text-align: center; }
+.cal__grid > span { display: flex; align-items: center; justify-content: center; }
+.cal__grid .sun { color: var(--sunday); }
+.cal__grid .is-wedding i { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--dot); color: #fff; font-style: normal; font-weight: 700; }
+
+/* 갤러리 */
+.gallery { padding: 70px 17px 53px; }
+.gallery .label { margin-right: -3px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 6px; row-gap: 9px; margin-top: 45px; }
+.tile { position: relative; display: block; width: 100%; padding: 0; border: 0; background: var(--cream); overflow: hidden; cursor: pointer; }
+.tile::before { content: ""; display: block; padding-top: 133.333%; }
+.tile > img, .tile > .ph, .tile__more { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.tile > img { object-fit: cover; }
+.tile__more { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 0, 0, .5); color: #fff; }
+.tile__more b { font-family: var(--f-num); font-size: 21px; line-height: 28px; font-weight: 300; }
+.tile__more small { font-family: var(--f-num); font-size: 10px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
+
+/* 오시는 길 */
+.venue { padding: 70px var(--gutter); text-align: right; }
+.venue__name { margin-top: 35px; font-size: 17.5px; line-height: 24.5px; font-weight: 500; }
+/* 예식장 사진: 조금 작게(가로 80%) 가운데 정렬해 양옆 여백을 같게. 16:9 자리를 미리 잡아 둬서 사진이 늦게 떠도 아래가 밀리지 않는다 */
+.venue__photo { position: relative; width: 80%; margin: 30px auto 0; background: #1b1b1b; }
+.venue__photo::before { content: ""; display: block; padding-top: 56.25%; }
+.venue__photo img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.venue__photo + .venue__name { margin-top: 24px; }
+.venue__photo + .mapbox { margin-top: 12px; }
+.venue__line { font-size: 12.25px; line-height: 19.9px; font-weight: 300; }
+.venue__name + .venue__line { margin-top: 7px; }
+.venue__line + .venue__line { margin-top: 4px; }
+.mapbox { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 179px; margin-top: 28px; border: 1px solid rgba(0, 0, 0, .05); border-radius: 1.75px; background: rgba(0, 0, 0, .05); }
+.mapbox svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.2; opacity: .6; }
+.mapbox span { margin-top: 7px; font-family: var(--f-caps); font-size: 10px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
+.mapbox--img { display: block; height: auto; border: 0; background: none; }
+.mapbox--img img { display: block; width: 100%; height: auto; }
+.maplinks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 27px 4px 0; }
+/* 한국어 이름 아래에 영어 이름(외국인 하객용)을 한 줄 더 */
+.mapbtn { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50px; padding: 7px 4px; border: 1px solid rgba(212, 207, 200, .2); border-radius: 999px; background: rgba(212, 207, 200, .08); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); font-size: 10px; line-height: 15px; font-weight: 500; letter-spacing: .025em; white-space: nowrap; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.mapbtn:active { transform: scale(.95); }
+.mapbtn__ko { display: flex; align-items: center; opacity: .8; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+/* 영어는 한국어와 같은 10px. 아주 좁은 화면(320px)에서만 버튼 밖으로 넘치지 않게 조금 줄어든다 */
+.mapbtn__en { margin-top: 3px; padding-left: .06em; font-family: var(--f-caps); font-size: 10px; font-size: clamp(8.6px, 2.67vw, 10px); line-height: 14px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; opacity: .7; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+.mapbtn svg { width: 9px; height: 9px; margin-left: 4px; fill: none; stroke: currentColor; stroke-width: 1.2; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+.mapbtn:hover .mapbtn__ko, .mapbtn:hover .mapbtn__en, .mapbtn:hover svg { opacity: 1; }
+.ways { margin-top: 36px; }
+.way + .way { margin-top: 28px; }
+.way h5 { font-size: 12.25px; line-height: 17.5px; font-weight: 700; }
+.way p { margin-top: 7px; font-size: 12.25px; line-height: 24.5px; font-weight: 300; }
+/* 외국인 하객용 영어 안내: 한국어 아래에 조금 작고 흐리게 */
+.way p.way__en { margin-top: 10px; font-size: 11.5px; line-height: 20px; opacity: .7; }
+.way__en span { display: block; margin-bottom: 2px; font-family: var(--f-caps); font-size: 9px; line-height: 15px; letter-spacing: .15em; text-transform: uppercase; }
+/* 두 줄로 딱 끊기도록 좁은 화면에서는 글자를 조금 줄인다 */
+.maptip { margin: 14px 4px 0; font-size: 11.5px; font-size: clamp(9.8px, 3.1vw, 11.5px); line-height: 19px; font-weight: 300; opacity: .7; }
+
+/* 계좌 */
+.account { padding: 70px var(--gutter) 69px; }
+.account__lead { margin-top: 35px; font-size: 12.25px; line-height: 24.5px; font-weight: 300; text-align: right; }
+.accs { margin-top: 41px; }
+.acc { border-top: 1px solid rgba(0, 0, 0, .1); }
+.acc:last-child { border-bottom: 1px solid rgba(0, 0, 0, .1); }
+.acc summary { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 7px; list-style: none; cursor: pointer; font-size: 12.25px; line-height: 17.5px; font-weight: 500; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+.acc[open] summary svg { transform: rotate(180deg); }
+.acc[open] { padding-bottom: 10px; }
+.acct { display: flex; align-items: center; justify-content: space-between; padding: 9px 7px 13px 14px; }
+.acct__name { font-size: 12.25px; line-height: 17.5px; font-weight: 500; }
+.acct__num { margin-top: 3px; font-size: 14px; line-height: 21px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.copy { display: flex; align-items: center; justify-content: center; flex: none; width: 30px; height: 30px; margin-left: 12px; padding: 0; border: 1px solid rgba(212, 207, 200, .2); background: rgba(212, 207, 200, .08); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); cursor: pointer; transition: color .15s cubic-bezier(.4, 0, .2, 1), background-color .15s cubic-bezier(.4, 0, .2, 1), border-color .15s cubic-bezier(.4, 0, .2, 1); }
+.copy svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.2; }
+
+/* 계좌 목록 아래 별도 파트: Registry (미국식 축의금). 펼치지 않아도 늘 보인다 */
+.registry { margin-top: 44px; }
+.registry__img { position: relative; width: 62%; margin: 18px auto 0; overflow: hidden; border-radius: 2px; background: #f4f2ed; }
+.registry__img::before { content: ""; display: block; padding-top: 100%; }
+.registry__img img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.registry__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin-top: 16px; padding: 8px 12px; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: rgba(212, 207, 200, .08); color: var(--paper); cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.registry__btn:active { transform: scale(.97); }
+.registry__title { font-family: var(--f-display); font-size: 17px; line-height: 22px; font-weight: 300; letter-spacing: -0.02em; }
+.registry__sub { margin-top: 2px; padding-left: .15em; font-family: var(--f-caps); font-size: 8.5px; line-height: 13px; letter-spacing: .15em; text-transform: uppercase; opacity: .6; }
+
+/* Honeymoon Fund 금액 창 */
+.fund { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 85; display: flex; align-items: center; justify-content: center; padding: 24px 18px; background: rgba(0, 0, 0, .72); animation: fadeIn .3s ease-in-out; }
+.fund.is-leaving { animation: fadeOut .3s ease-in-out forwards; }
+.fund__panel { position: relative; width: 100%; max-width: 340px; max-height: 100%; overflow-y: auto; padding: 36px 24px 24px; border: 1px solid rgba(212, 207, 200, .18); background: var(--black); color: var(--paper); text-align: center; }
+.fund__close { position: absolute; top: 6px; right: 6px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; background: none; color: var(--paper); cursor: pointer; }
+.fund__close svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
+.fund__label { padding-left: .3em; font-family: var(--f-caps); font-size: 10px; line-height: 15px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--peach); }
+.fund__title { margin-top: 10px; font-family: var(--f-display); font-size: 27px; line-height: 1.2; font-weight: 300; letter-spacing: -0.03em; }
+.fund__text { margin-top: 12px; font-size: 12.5px; line-height: 1.75; font-weight: 300; opacity: .8; }
+.fund__amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 22px; }
+.fund__amt { height: 40px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-num); font-size: 13px; cursor: pointer; transition: all .2s ease; }
+.fund__amt[aria-pressed="true"] { border-color: var(--paper); background: var(--paper); color: #111; }
+.fund__custom { display: flex; align-items: center; margin-top: 14px; border-bottom: 1px solid rgba(212, 207, 200, .35); }
+.fund__custom span { padding-left: 4px; font-family: var(--f-num); font-size: 18px; opacity: .7; }
+.fund__custom input { flex: 1; min-width: 0; padding: 8px 6px; border: 0; background: transparent; color: var(--paper); font-family: var(--f-num); font-size: 18px; outline: none; }
+.fund__custom input::placeholder { color: rgba(212, 207, 200, .4); font-size: 14px; }
+.fund__note { min-height: 18px; margin-top: 8px; font-size: 11px; line-height: 18px; color: #f4a28c; }
+.fund__actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; margin-top: 6px; }
+.fund__cancel { height: 46px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-caps); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+.fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: #000; font-family: var(--f-display); font-size: 18px; font-weight: 300; letter-spacing: -0.01em; }
+.fund__fine { margin-top: 14px; font-size: 10.5px; line-height: 1.6; opacity: .55; }
+
+/* 공유 */
+.share { padding: 70px var(--gutter) 120px; background: var(--black-2); text-align: right; }
+.share__rule { display: block; width: 20px; height: 1px; margin-left: auto; background: rgba(212, 207, 200, .35); }
+.share .label { margin-top: 35px; }
+.share__text { margin-top: 14px; font-size: 12.25px; line-height: 24.5px; font-weight: 300; }
+.share__btns { display: flex; justify-content: flex-end; margin-top: 42px; }
+.share__btn { display: flex; flex-direction: column; align-items: center; padding: 0; border: 0; background: none; cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.share__btn + .share__btn { margin-left: 28px; }
+.share__btn i { display: flex; align-items: center; justify-content: center; width: 38.5px; height: 38.5px; border-radius: 50%; background: rgba(212, 207, 200, .08); transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.share__btn svg { width: 18px; height: 18px; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+.share__btn span { margin-top: 9px; padding-left: .15em; font-family: var(--f-caps); font-size: 9px; line-height: 13.5px; letter-spacing: .15em; text-transform: uppercase; opacity: .8; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+.share__btn:hover svg, .share__btn:hover span { opacity: 1; }
+
+/* 종이 질감 */
+.grain {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 90;
+  max-width: var(--col); margin: 0 auto; pointer-events: none; opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 메뉴 */
+.menu { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 80; max-width: var(--col); margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--orange); color: #000; animation: fadeIn .3s ease-in-out; }
+.menu__close { position: absolute; top: calc(6px + env(safe-area-inset-top, 0px)); right: 17px; }
+.menu__item { padding: 6px 18px; border: 0; background: none; font-family: var(--f-display); font-size: 21px; line-height: 1.3; font-weight: 300; letter-spacing: -0.04em; cursor: pointer; }
+
+/* 갤러리 전체 보기 */
+.gpage { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 82; max-width: var(--col); margin: 0 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--black); padding: calc(70px + env(safe-area-inset-top, 0px)) 17px 60px; animation: fadeIn .4s ease-in-out; }
+.gpage__close { position: absolute; top: calc(6px + env(safe-area-inset-top, 0px)); right: 17px; color: var(--paper); }
+.gpage .label { margin-right: -3px; }
+.gpage .grid { margin-top: 30px; }
+
+/* 사진 크게 보기 */
+.lb { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 100; background: rgba(6, 6, 6, .97); animation: fadeIn .25s ease; }
+.lb__stage { position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; padding: calc(56px + env(safe-area-inset-top, 0px)) 10px calc(56px + env(safe-area-inset-bottom, 0px)); touch-action: pan-y; }
+.lb__stage img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-select: none; user-select: none; }
+.lb__btn { position: absolute; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: #eee9e2; cursor: pointer; }
+.lb__btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 2px rgba(0, 0, 0, .65)); }
+.lb__close { top: calc(6px + env(safe-area-inset-top, 0px)); right: 8px; }
+.lb__prev { top: 50%; left: 2px; margin-top: -22px; }
+.lb__next { top: 50%; right: 2px; margin-top: -22px; }
+.lb__count { position: absolute; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; color: #bdb7ae; font-family: var(--f-caps); font-size: 10px; letter-spacing: .3em; }
+
+/* 배경음악 */
+.bgm { position: fixed; left: max(21px, calc(50% - var(--col) / 2 + 21px)); bottom: calc(21px + env(safe-area-inset-bottom, 0px)); z-index: 60; display: flex; align-items: center; justify-content: center; width: 41px; height: 41px; padding: 0; border: 0; border-radius: 50%; background: rgba(10, 10, 10, .35); color: var(--paper); cursor: pointer; }
+.bgm svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* 안내 문구 */
+.toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 110; max-width: calc(100% - 40px); padding: 10px 16px; border-radius: 999px; background: rgba(212, 207, 200, .96); color: #111; font-family: var(--f-body); font-size: 12px; line-height: 1.5; font-weight: 500; text-align: center; transform: translateX(-50%); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
+
+/* 스크롤하면 떠오르기 — 원본(더뉴챕터)과 같은 값: 섹션 단위로 30px 아래에서 2.2초 */
+.can-reveal [data-reveal] { opacity: 0; transform: translateY(30px); }
+.can-reveal [data-reveal].is-in { opacity: 1; transform: none; transition: opacity 2.2s cubic-bezier(.16, 1, .3, 1), transform 2.2s cubic-bezier(.16, 1, .3, 1); }
+/* 갤러리 사진은 0.12초 간격으로 하나씩: 20px 아래·95% 크기에서 1.2초 */
+.can-reveal [data-stagger] > * { opacity: 0; transform: translateY(20px) scale(.95); }
+.can-reveal [data-stagger].is-in > * { opacity: 1; transform: none; transition: opacity 1.2s cubic-bezier(.16, 1, .3, 1), transform 1.2s cubic-bezier(.16, 1, .3, 1); }
+/* 사진은 다 받은 뒤 서서히 (표지·배경 0.3초, 갤러리 0.5초) */
+.fade-img { opacity: 0; transition: opacity .3s cubic-bezier(0, 0, .2, 1); }
+.fade-img.is-loaded { opacity: 1; }
+.tile > .fade-img { transition-duration: .5s; }
+
+/* 메뉴·갤러리·사진 창은 열 때와 닫을 때 모두 서서히 */
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes fadeOut { to { opacity: 0; } }
+.is-leaving { pointer-events: none; }
+.menu.is-leaving { animation: fadeOut .3s ease-in-out forwards; }
+.gpage.is-leaving { animation: fadeOut .4s ease-in-out forwards; }
+.lb.is-leaving { animation: fadeOut .25s ease forwards; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<header class="bar" id="bar">
+  <span class="bar__mark" aria-hidden="true">𓁇𓁋𓁇𓁋𓁇𓁋𓁇𓁋𓁇𓁋𓁇𓁋𓁇𓁋</span>
+  <button type="button" class="bar__btn" id="menuOpen" aria-label="메뉴 열기" aria-expanded="false" aria-controls="menu">
+    <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M4 6h14M4 11h14M4 17h14"/></svg>
+  </button>
+</header>
+
+<main class="stage" id="app"></main>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="menu" id="menu" aria-label="메뉴" hidden>
+  <button type="button" class="bar__btn menu__close" data-menu="close" aria-label="메뉴 닫기">
+    <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.5 5.5l11 11M16.5 5.5l-11 11"/></svg>
+  </button>
+  <button type="button" class="menu__item" data-menu="home">Home</button>
+  <button type="button" class="menu__item" data-menu="gallery" id="menuGallery">Gallery</button>
+</nav>
+
+<section class="gpage" id="gpage" aria-label="갤러리 전체" hidden>
+  <button type="button" class="bar__btn gpage__close" data-gpage="close" aria-label="갤러리 닫기">
+    <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.5 5.5l11 11M16.5 5.5l-11 11"/></svg>
+  </button>
+  <h3 class="label" id="gpageTitle"></h3>
+  <div class="grid" id="gpageGrid"></div>
+</section>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="사진 크게 보기" hidden>
+  <div class="lb__stage" id="lbStage"><img id="lbImg" alt=""></div>
+  <button type="button" class="lb__btn lb__close" data-lb="close" aria-label="닫기"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.5 5.5l11 11M16.5 5.5l-11 11"/></svg></button>
+  <button type="button" class="lb__btn lb__prev" data-lb="prev" aria-label="이전 사진"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M13.5 5l-6 6 6 6"/></svg></button>
+  <button type="button" class="lb__btn lb__next" data-lb="next" aria-label="다음 사진"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M8.5 5l6 6-6 6"/></svg></button>
+  <p class="lb__count" id="lbCount"></p>
+</div>
+
+<div class="fund" id="fund" role="dialog" aria-modal="true" aria-labelledby="fundTitle" lang="en" hidden>
+  <div class="fund__panel">
+    <button type="button" class="fund__close" data-fund="close" aria-label="Close"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.5 5.5l11 11M16.5 5.5l-11 11"/></svg></button>
+    <p class="fund__label" id="fundLabel"></p>
+    <h3 class="fund__title" id="fundTitle"></h3>
+    <p class="fund__text" id="fundText"></p>
+    <div class="fund__amounts" id="fundAmounts" role="group" aria-label="Suggested amounts"></div>
+    <label class="fund__custom" for="fundAmount"><span aria-hidden="true">$</span><input id="fundAmount" inputmode="decimal" autocomplete="off" placeholder="Other amount" aria-label="Gift amount in US dollars"></label>
+    <p class="fund__note" id="fundNote" role="alert"></p>
+    <div class="fund__actions">
+      <button type="button" class="fund__cancel" data-fund="close">Cancel</button>
+      <a class="fund__gift" id="fundGift" href="#" target="_blank" rel="noopener">Gift it!</a>
+    </div>
+    <p class="fund__fine">You'll finish your gift securely on PayPal.</p>
+  </div>
+</div>
+
+<button type="button" class="bgm" id="bgm" aria-label="배경음악 재생" aria-pressed="false" hidden></button>
+<audio id="bgmAudio" loop preload="none"></audio>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+  'use strict';
+  const W = window.WEDDING;
+  const doc = document;
+  const root = doc.documentElement;
+  const $ = (sel, el) => (el || doc).querySelector(sel);
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const lines = v => esc(v).replace(/\n/g, '<br>');
+  const has = v => (typeof v === 'string' ? v.trim() !== '' : Array.isArray(v) ? v.length > 0 : v != null && v !== false);
+  const pad = n => (n < 10 ? '0' : '') + n;
+  root.lang = 'ko';
+  const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  const ICON = {
+    pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></svg>',
+    out: '<svg viewBox="0 0 9 9" aria-hidden="true"><path d="M2 7L7 2M3.2 2H7v3.8"/></svg>',
+    chev: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>',
+    copy: '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="7.5" height="7.5" rx="1"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg>',
+    bubble: '<svg viewBox="0 0 18 18" aria-hidden="true" fill="currentColor"><path d="M9 3C5.13 3 2 5.46 2 8.5c0 1.95 1.3 3.66 3.25 4.63l-.73 2.72c-.06.22.19.4.38.27L8.1 14c.3.02.6.03.9.03 3.87 0 7-2.46 7-5.5S12.87 3 9 3z"/></svg>',
+    link: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6.6 9.4l2.8-2.8"/><path d="M7.4 4.6l1.1-1.1a2.6 2.6 0 0 1 3.7 3.7l-1.1 1.1"/><path d="M8.6 11.4l-1.1 1.1a2.6 2.6 0 0 1-3.7-3.7l1.1-1.1"/></svg>',
+    play: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6l7.6-4.8z"/></svg>',
+    pause: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 3.4h2.2v9.2H4.6zM9.2 3.4h2.2v9.2H9.2z"/></svg>',
+    prev: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg>',
+    next: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5"/></svg>',
+  };
+
+  /* ── 예식 일시: 한국 시간 문자열에서 바로 읽어 보는 사람의 시간대와 무관하게 표시 ── */
+  const dm = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(W.date);
+  const Y = +dm[1], MO = +dm[2], D = +dm[3], H = +dm[4], MI = +dm[5];
+  const weekday = new Date(Date.UTC(Y, MO - 1, D)).getUTCDay();
+  const koTime = (H < 12 ? '오전 ' : '오후 ') + (H % 12 || 12) + '시' + (MI ? ' ' + MI + '분' : '');
+  const dotDate = Y + '.' + pad(MO) + '.' + pad(D);
+  const koDay = '일월화수목금토'.charAt(weekday) + '요일';
+  // 외국인 하객용 영어 날짜 (예: Saturday, February 13, 2027 · 6:30 PM)
+  const enDate = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][weekday] + ', '
+    + ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][MO - 1]
+    + ` ${D}, ${Y} · ${H % 12 || 12}:${pad(MI)} ${H < 12 ? 'AM' : 'PM'}`;
+
+  const photos = (W.photos.gallery || []).map(p => (typeof p === 'string' ? { src: p, thumb: p, pos: '' } : { src: p.src, thumb: p.thumb || p.src, pos: p.pos || '' }));
+  const posStyle = pos => (pos ? ` style="object-position:${esc(pos)}"` : '');
+  const tileItems = photos.length ? photos : W.draft ? [null, null, null, null, null, null, null] : [];
+  const SHOW = W.gallery.show || 6;
+
+  const label = t => `<h3 class="label">${esc(t)}</h3>`;
+
+  /* ── 섹션 ── */
+  const coverPhoto = has(W.photos.cover)
+    ? `<figure class="cover__photo"><img class="fade-img" src="${esc(W.photos.cover)}" alt="${esc(W.groom.en)} & ${esc(W.bride.en)}"></figure>`
+    : W.draft ? '<figure class="cover__photo"><span class="ph">Photo</span></figure>' : '';
+
+  const cover = `
+  <section class="cover" id="home">
+    <div class="cover__text" data-reveal>
+      <p class="invited">${esc(W.invited)}</p>
+      <h1 class="names">${esc(W.groom.en)}<span class="amp">&amp;</span>${esc(W.bride.en)}</h1>
+      <div class="cover__meta">
+        <p class="meta">${dotDate} ${koTime}</p>
+        <p class="meta">${esc(W.venue.name)}</p>
+      </div>
+    </div>
+    ${coverPhoto}
+  </section>`;
+
+  const person = (role, p) => `
+    <div class="person">
+      <p class="person__name"><span>${role}</span><b>${esc(p.name)}</b></p>
+      <p class="person__parents">${p.parents.filter(has).map(esc).join(p.parentsBreak ? ' ·<br>' : ' · ')} 의 ${esc(p.relation)}</p>
+    </div>`;
+
+  const intro = `
+  <section class="intro">
+    <div data-reveal>
+      <p class="greeting">${esc(W.greeting)}</p>
+      ${has(W.greetingKo) ? `<p class="greeting__ko">${lines(W.greetingKo)}</p>` : ''}
+    </div>
+    <div class="people" data-reveal>${person('신랑', W.groom)}${person('신부', W.bride)}</div>
+  </section>`;
+
+  const pl = W.playlist;
+  const plPhoto = typeof W.photos.playlist === 'string' ? { src: W.photos.playlist, pos: '' } : (W.photos.playlist || {});
+  const playlist = has(pl.songs) ? `
+  <section class="playlist">
+    <div class="playlist__bg">${has(plPhoto.src) ? `<img class="fade-img" src="${esc(plPhoto.src)}" alt=""${posStyle(plPhoto.pos)}>` : ''}</div>
+    <div class="playlist__shade"></div>
+    <div class="playlist__body" data-reveal>
+      ${label(pl.title)}
+      <ol class="songs">${pl.songs.map((s, i) => `<li>${i + 1}. ${esc(s)}</li>`).join('')}</ol>
+      ${has(pl.more) ? `<p class="songs__more">${esc(pl.more)}</p>` : ''}
+    </div>
+  </section>` : '';
+
+  function calendarCells() {
+    const first = new Date(Date.UTC(Y, MO - 1, 1)).getUTCDay();
+    const days = new Date(Date.UTC(Y, MO, 0)).getUTCDate();
+    let html = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => `<span${i === 0 ? ' class="sun"' : ''}>${d}</span>`).join('');
+    for (let i = 0; i < first; i++) html += '<span></span>';
+    for (let d = 1; d <= days; d++) {
+      const sun = (first + d - 1) % 7 === 0;
+      html += d === D ? `<span class="is-wedding"><i>${d}</i></span>` : `<span${sun ? ' class="sun"' : ''}>${d}</span>`;
+    }
+    return html;
+  }
+
+  const calendar = `
+  <section class="cal">
+    <div data-reveal>
+      <p class="cal__date">${dotDate}</p>
+      <p class="cal__time">${koDay} ${koTime}</p>
+      <p class="cal__en" lang="en">${enDate}</p>
+      <div class="cal__grid" aria-label="${Y}년 ${MO}월 달력, ${D}일 예식">${calendarCells()}</div>
+    </div>
+  </section>`;
+
+  const tileHtml = (p, i, moreCount) => {
+    const inner = p ? `<img class="fade-img" src="${esc(p.thumb)}" alt=""${posStyle(p.pos)} loading="lazy" decoding="async">` : '<span class="ph">Photo</span>';
+    const more = moreCount > 0 ? `<span class="tile__more"><b>+ ${moreCount}</b><small>More</small></span>` : '';
+    const name = moreCount > 0 ? '사진 전체 보기' : `사진 ${i + 1} 크게 보기`;
+    return `<button type="button" class="tile" data-i="${i}"${moreCount > 0 ? ' data-more="1"' : ''} aria-label="${name}">${inner}${more}</button>`;
+  };
+
+  const gallery = tileItems.length ? `
+  <section class="gallery" id="gallery">
+    <div data-reveal>
+      ${label(W.gallery.title)}
+      <div class="grid" data-stagger>${tileItems.slice(0, SHOW).map((p, i) => tileHtml(p, i, i === SHOW - 1 ? tileItems.length - SHOW : 0)).join('')}</div>
+    </div>
+  </section>` : '';
+
+  const v = W.venue;
+  const venuePhoto = has(v.photo)
+    ? `<figure class="venue__photo"><img class="fade-img" src="${esc(v.photo)}" alt="${esc(v.photoAlt || '')}" loading="lazy" decoding="async"></figure>`
+    : '';
+  const venue = `
+  <section class="venue" id="venue">
+    <div data-reveal>
+      ${label('The Venue')}
+      ${v.photoAt === 'top' ? venuePhoto : ''}
+      <h4 class="venue__name">${esc(v.name)}</h4>
+      <p class="venue__line">${esc(v.address)}</p>
+      ${has(v.tel) ? `<p class="venue__line"><a href="tel:${v.tel.replace(/[^0-9]/g, '')}">${esc(v.tel)}</a></p>` : ''}
+      ${v.photoAt === 'map' ? venuePhoto : ''}
+      ${has(v.mapImage)
+        ? `<div class="mapbox mapbox--img"><img class="fade-img" src="${esc(v.mapImage)}" alt="${esc(v.mapAlt || '오시는 길 약도')}" loading="lazy" decoding="async"></div>`
+        : `<div class="mapbox">${ICON.pin}<span>Map Preview</span></div>`}
+      <div class="maplinks">${v.maps.map(m => `<a class="mapbtn" href="${esc(m.url)}" target="_blank" rel="noopener"><span class="mapbtn__ko">${esc(m.label)}${ICON.out}</span>${m.en ? `<span class="mapbtn__en">${esc(m.en)}</span>` : ''}</a>`).join('')}</div>
+      ${has(v.mapTip) ? `<p class="maptip" lang="en">${lines(v.mapTip)}</p>` : ''}
+      <div class="ways">${W.ways.map(w => `<div class="way"><h5>[ ${esc(w.title)} ]</h5><p>${lines(w.text)}</p>${has(w.en) ? `<p class="way__en" lang="en"><span>${esc(w.en)}</span>${lines(w.enText)}</p>` : ''}</div>`).join('')}</div>
+    </div>
+  </section>`;
+
+  const acctRows = list => list.map(a => `
+      <div class="acct">
+        <div><p class="acct__name">${esc(a.name)}</p><p class="acct__num">${esc(a.bank)}&nbsp;&nbsp;<span class="acct__digits">${esc(a.number)}</span></p></div>
+        <button type="button" class="copy" data-copy="${esc(a.number.replace(/[^0-9]/g, ''))}" data-bank="${esc(a.bank)}" aria-label="${esc(a.name)} 계좌번호 복사">${ICON.copy}</button>
+      </div>`).join('');
+
+  const RG = W.registry;
+  const registryOn = !!(RG && has(RG.paypal));
+  const registryHtml = registryOn ? `
+      <div class="registry" lang="en">
+        <p class="label">${esc(RG.label)}</p>
+        ${has(RG.image) ? `<figure class="registry__img"><img class="fade-img" src="${esc(RG.image)}" alt="${esc(RG.imageAlt || '')}" loading="lazy" decoding="async"></figure>` : ''}
+        <button type="button" class="registry__btn" id="openFund"><span class="registry__title">${esc(RG.title)}</span><span class="registry__sub">Gift any amount · PayPal</span></button>
+      </div>` : '';
+  const accountSide = (title, list) => (has(list) ? `<details class="acc"><summary>${title}${ICON.chev}</summary>${acctRows(list)}</details>` : '');
+
+  const account = has(W.accounts.groom) || has(W.accounts.bride) ? `
+  <section class="account" id="account">
+    <div data-reveal>
+      ${label('Account')}
+      <p class="account__lead">${esc(W.accountLead)}</p>
+      <div class="accs">${accountSide('신랑측 계좌번호', W.accounts.groom)}${accountSide('신부측 계좌번호', W.accounts.bride)}</div>
+      ${registryHtml}
+    </div>
+  </section>` : '';
+
+  const share = `
+  <section class="share">
+    <div data-reveal>
+      <span class="share__rule"></span>
+      ${label('Share')}
+      <p class="share__text">${esc(W.share.text)}</p>
+      <div class="share__btns">
+        <button type="button" class="share__btn" id="shareKakao"><i>${ICON.bubble}</i><span>Kakao</span></button>
+        <button type="button" class="share__btn" id="shareLink"><i>${ICON.link}</i><span>Link</span></button>
+      </div>
+    </div>
+  </section>`;
+
+  const app = $('#app');
+  app.innerHTML = cover + intro + playlist + calendar + gallery + venue + account + share;
+
+  // 사진은 다 받은 다음 서서히 나타난다
+  function fadeImages(scope) {
+    scope.querySelectorAll('img.fade-img').forEach(img => {
+      const show = () => img.classList.add('is-loaded');
+      if (img.complete && img.naturalWidth) show();
+      else { img.addEventListener('load', show); img.addEventListener('error', show); }
+    });
+  }
+  fadeImages(app);
+
+  /* ── 안내 문구와 복사 ── */
+  const toastEl = $('#toast');
+  let toastTimer = 0;
+  function toast(msg, ms) {
+    toastEl.textContent = msg;
+    toastEl.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.hidden = true; }, ms || 2400);
+  }
+  // 탭하는 순간 바로 실행되는 예전 방식. 새 방식이 막힌 iOS 인앱 브라우저에서도 동작한다.
+  function legacyCopy(text) {
+    const active = doc.activeElement;
+    const ta = doc.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;font-size:16px;';
+    doc.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    let ok = false;
+    try { ok = doc.execCommand('copy'); } catch (e) { ok = false; }
+    doc.body.removeChild(ta);
+    if (active && active.focus) active.focus();
+    return ok;
+  }
+  // 같은 탭 안에서 두 방식을 모두 시도한다. 둘 다 막히면 번호를 선택해 두어 길게 눌러 복사할 수 있게 한다.
+  function copy(text, msg, selectEl) {
+    const legacyOk = legacyCopy(text);
+    const done = ok => {
+      if (ok) return toast(msg);
+      if (selectEl) {
+        const range = doc.createRange();
+        range.selectNodeContents(selectEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      toast('자동 복사가 막혀 있어요. 길게 눌러 복사해 주세요: ' + text, 5000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), () => done(legacyOk));
+    else done(legacyOk);
+  }
+
+  /* ── 겹쳐 뜨는 창: 스크롤 잠금과 초점 돌려주기 ── */
+  let locks = 0;
+  function lock(on) {
+    locks = Math.max(0, locks + (on ? 1 : -1));
+    root.style.overflow = locks ? 'hidden' : '';
+    doc.body.style.overflow = locks ? 'hidden' : '';
+  }
+  const stack = [];
+  const LEAVE_MS = { menu: 300, gpage: 400, lb: 250, fund: 300 };
+  function openLayer(el, opener, focusSel) {
+    el.classList.remove('is-leaving');
+    el.hidden = false;
+    lock(true);
+    stack.push({ el, opener });
+    const f = $(focusSel, el);
+    if (f) f.focus();
+  }
+  function closeLayer(el) {
+    let i = stack.length - 1;
+    while (i >= 0 && stack[i].el !== el) i--;
+    if (el.hidden || i < 0) return;
+    const opener = stack[i].opener;
+    stack.splice(i, 1);
+    lock(false);
+    if (opener && opener.focus) opener.focus();
+    if (reduceMotion) { el.hidden = true; return; }
+    // 원본처럼 닫을 때도 서서히 사라진 뒤 숨긴다
+    el.classList.add('is-leaving');
+    setTimeout(() => {
+      if (!el.classList.contains('is-leaving')) return;
+      el.classList.remove('is-leaving');
+      el.hidden = true;
+    }, LEAVE_MS[el.id] || 250);
+  }
+
+  /* ── 상단 막대: 표지를 벗어나면 주황 배경 ── */
+  const bar = $('#bar');
+  const onScroll = () => bar.classList.toggle('is-solid', (window.pageYOffset || root.scrollTop) > 24);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── 메뉴 ── */
+  const menu = $('#menu');
+  const menuBtn = $('#menuOpen');
+  if (!tileItems.length) $('#menuGallery').hidden = true;
+  menuBtn.addEventListener('click', () => { menuBtn.setAttribute('aria-expanded', 'true'); openLayer(menu, menuBtn, '.menu__close'); });
+  menu.addEventListener('click', e => {
+    const b = e.target.closest('[data-menu]');
+    if (!b) return;
+    menuBtn.setAttribute('aria-expanded', 'false');
+    closeLayer(menu);
+    if (b.dataset.menu === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (b.dataset.menu === 'gallery') openGpage(menuBtn);
+  });
+
+  /* ── 갤러리 전체 보기 ── */
+  const gpage = $('#gpage');
+  $('#gpageTitle').textContent = W.gallery.title;
+  $('#gpageGrid').innerHTML = tileItems.map((p, i) => tileHtml(p, i, 0)).join('');
+  fadeImages($('#gpageGrid'));
+  function openGpage(opener) { openLayer(gpage, opener, '.gpage__close'); }
+  gpage.addEventListener('click', e => {
+    if (e.target.closest('[data-gpage]')) return closeLayer(gpage);
+    const t = e.target.closest('.tile');
+    if (t) showPhoto(+t.dataset.i, t);
+  });
+
+  /* ── 사진 크게 보기 ── */
+  const lb = $('#lb');
+  const lbImg = $('#lbImg');
+  const lbStage = $('#lbStage');
+  let lbIndex = 0;
+  function renderLb() {
+    lbImg.src = photos[lbIndex].src;
+    lbImg.alt = `사진 ${lbIndex + 1}`;
+    $('#lbCount').textContent = `${lbIndex + 1} / ${photos.length}`;
+  }
+  function showPhoto(i, opener) {
+    if (!photos.length) return toast('사진이 들어오면 크게 볼 수 있어요');
+    lbIndex = i;
+    renderLb();
+    openLayer(lb, opener, '.lb__close');
+  }
+  function stepLb(n) { lbIndex = (lbIndex + n + photos.length) % photos.length; renderLb(); }
+  lb.addEventListener('click', e => {
+    const b = e.target.closest('[data-lb]');
+    if (b) {
+      if (b.dataset.lb === 'close') closeLayer(lb);
+      else stepLb(b.dataset.lb === 'next' ? 1 : -1);
+    } else if (e.target === lbStage) closeLayer(lb);
+  });
+  let sx = null, sy = 0;
+  lbStage.addEventListener('touchstart', e => { const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+  lbStage.addEventListener('touchend', e => {
+    if (sx === null) return;
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    sx = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) stepLb(dx < 0 ? 1 : -1);
+  });
+
+  /* ── Honeymoon Fund: 금액을 고르면 PayPal이 그 금액을 채운 채로 열린다 ── */
+  const fundEl = $('#fund');
+  const fundInput = $('#fundAmount');
+  const fundGift = $('#fundGift');
+  const fundNote = $('#fundNote');
+  const fundAmount = () => {
+    const n = parseFloat(String(fundInput.value).replace(/[^0-9.]/g, ''));
+    return n > 0 && n <= 10000 ? Math.round(n * 100) / 100 : 0;
+  };
+  function syncFund() {
+    const n = fundAmount();
+    fundGift.href = n ? `${RG.paypal.replace(/\/+$/, '')}/${n}${RG.currency}` : RG.paypal;
+    fundGift.setAttribute('aria-disabled', n ? 'false' : 'true');
+    fundEl.querySelectorAll('.fund__amt').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.amt === n)));
+    return n;
+  }
+  if (registryOn) {
+    $('#fundLabel').textContent = RG.label;
+    $('#fundTitle').textContent = RG.title;
+    $('#fundText').textContent = RG.text;
+    $('#fundAmounts').innerHTML = RG.amounts.map(a => `<button type="button" class="fund__amt" data-amt="${a}" aria-pressed="false">$${a}</button>`).join('');
+    syncFund();
+    fundEl.addEventListener('click', e => {
+      if (e.target === fundEl || e.target.closest('[data-fund="close"]')) return closeLayer(fundEl);
+      const chip = e.target.closest('.fund__amt');
+      if (chip) { fundInput.value = chip.dataset.amt; fundNote.textContent = ''; syncFund(); }
+    });
+    fundInput.addEventListener('input', () => { fundNote.textContent = ''; syncFund(); });
+    fundGift.addEventListener('click', e => {
+      if (!syncFund()) {
+        e.preventDefault();
+        fundNote.textContent = 'Please choose or enter an amount.';
+        return;
+      }
+      setTimeout(() => closeLayer(fundEl), 300);
+      toast('Opening PayPal. Thank you so much!');
+    });
+  }
+  function openFund(opener) {
+    fundNote.textContent = '';
+    openLayer(fundEl, opener, '.fund__close');
+  }
+
+  /* ── 공유 ── */
+  const pageUrl = () => W.share.url || location.href.split('#')[0];
+  function shareNative() {
+    const data = { title: W.share.title, text: W.share.description, url: pageUrl() };
+    if (navigator.share) {
+      navigator.share(data).catch(err => { if (!err || err.name !== 'AbortError') copy(pageUrl(), '링크를 복사했어요. 카카오톡에 붙여 넣어 주세요.'); });
+    } else copy(pageUrl(), '링크를 복사했어요. 카카오톡에 붙여 넣어 주세요.');
+  }
+
+  /* ── 본문 버튼 ── */
+  app.addEventListener('click', e => {
+    const t = e.target.closest('button');
+    if (!t) return;
+    if (t.classList.contains('tile')) return t.dataset.more ? openGpage(t) : showPhoto(+t.dataset.i, t);
+    if (t.dataset.copy) return copy(t.dataset.copy, `${t.dataset.bank} 계좌번호를 복사했어요`, t.parentNode.querySelector('.acct__digits'));
+    if (t.id === 'openFund') return openFund(t);
+    if (t.id === 'shareKakao') return shareNative();
+    if (t.id === 'shareLink') return copy(pageUrl(), '링크가 복사되었습니다');
+  });
+
+  /* ── 배경음악 ── */
+  const bgm = $('#bgm');
+  const audio = $('#bgmAudio');
+  const setBgmIcon = playing => {
+    bgm.innerHTML = playing ? ICON.pause : ICON.play;
+    bgm.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    bgm.setAttribute('aria-label', playing ? '배경음악 멈춤' : '배경음악 재생');
+  };
+  if (has(W.bgm) || W.draft) {
+    bgm.hidden = false;
+    setBgmIcon(false);
+    if (has(W.bgm)) audio.src = W.bgm;
+    audio.addEventListener('play', () => setBgmIcon(true));
+    audio.addEventListener('pause', () => setBgmIcon(false));
+    bgm.addEventListener('click', () => {
+      if (!has(W.bgm)) return toast('배경음악 파일(mp3)을 넣으면 여기서 재생됩니다');
+      if (audio.paused) audio.play().catch(() => toast('배경음악을 재생하지 못했어요'));
+      else audio.pause();
+    });
+  }
+
+  /* ── Esc 로 맨 위 창 닫기 ── */
+  doc.addEventListener('keydown', e => {
+    if (!stack.length) return;
+    const top = stack[stack.length - 1].el;
+    if (e.key === 'Escape') {
+      if (top === menu) menuBtn.setAttribute('aria-expanded', 'false');
+      closeLayer(top);
+    } else if (top === lb && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) stepLb(e.key === 'ArrowRight' ? 1 : -1);
+  });
+
+  /* ── 스크롤하면 떠오르기: 원본과 같은 값. 섹션은 화면 안쪽 5%, 갤러리는 10%에 들어오면 한 번만.
+        원본처럼 글꼴을 다 받은 뒤에 시작한다 (최대 3초 기다림) ── */
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    root.classList.add('can-reveal');
+    app.querySelectorAll('[data-stagger]').forEach(grid => {
+      Array.prototype.forEach.call(grid.children, (child, i) => { child.style.transitionDelay = (i * 0.12).toFixed(2) + 's'; });
+    });
+    const watch = (sel, margin) => {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: margin });
+      app.querySelectorAll(sel).forEach(el => io.observe(el));
+    };
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      watch('[data-reveal]', '-5%');
+      watch('[data-stagger]', '-10%');
+    };
+    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(start, start);
+    else start();
+    setTimeout(start, 3000);
+  }
+})();
+</script>
+
+</body>
+</html>
