@@ -263,7 +263,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 44.5px; margin-top: 45px; font-family: var(--f-display); font-size: 13.65px; font-weight: 300; letter-spacing: -0.04em; text-align: center; }
 .cal__grid > span { display: flex; align-items: center; justify-content: center; }
 .cal__grid .sun { color: var(--sunday); }
-.cal__grid .is-wedding i { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--dot); color: #fff; font-style: normal; font-weight: 700; }
+.cal__grid .is-wedding i { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: #000; font-style: normal; font-weight: 700; }
 
 /* 갤러리 */
 .gallery { padding: 70px 17px 53px; }
@@ -281,10 +281,12 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .venue { padding: 70px var(--gutter); text-align: right; }
 .venue__name { margin-top: 35px; font-size: 17.5px; line-height: 24.5px; font-weight: 500; }
 /* 예식장 사진: 조금 작게(가로 80%) 가운데 정렬해 양옆 여백을 같게. 16:9 자리를 미리 잡아 둬서 사진이 늦게 떠도 아래가 밀리지 않는다 */
-.venue__photo { position: relative; width: 80%; margin: 30px auto 0; background: #1b1b1b; }
+.venue__photo { position: relative; width: 80%; margin: 34px auto 0; background: #1b1b1b; }
 .venue__photo::before { content: ""; display: block; padding-top: 56.25%; }
 .venue__photo img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-.venue__photo + .venue__name { margin-top: 24px; }
+.venue__photo + .venue__name { margin-top: 30px; }
+/* 사진 액자: 사진에서 6px 떨어진 얇은 흰 선 + 사진 가장자리의 옅은 선 (자리 차지 없이 바깥에 그린다) */
+.framed { outline: 1px solid rgba(244, 242, 237, .7); outline-offset: 6px; box-shadow: 0 0 0 1px rgba(244, 242, 237, .2); }
 .venue__photo + .mapbox { margin-top: 12px; }
 .venue__line { font-size: 12.25px; line-height: 19.9px; font-weight: 300; }
 .venue__name + .venue__line { margin-top: 7px; }
@@ -332,7 +334,8 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
 /* 계좌 목록 아래 별도 파트: Registry (미국식 축의금). 펼치지 않아도 늘 보인다 */
 .registry { margin-top: 44px; }
-.registry__img { position: relative; width: 62%; margin: 18px auto 0; overflow: hidden; border-radius: 2px; background: #f4f2ed; }
+.registry__img { position: relative; width: 62%; margin: 26px auto 0; overflow: hidden; background: #f4f2ed; }
+.registry__img + .registry__btn { margin-top: 26px; }
 .registry__img::before { content: ""; display: block; padding-top: 100%; }
 .registry__img img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .registry__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin-top: 16px; padding: 8px 12px; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: rgba(212, 207, 200, .08); color: var(--paper); cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
@@ -620,7 +623,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
   const v = W.venue;
   const venuePhoto = has(v.photo)
-    ? `<figure class="venue__photo"><img class="fade-img" src="${esc(v.photo)}" alt="${esc(v.photoAlt || '')}" loading="lazy" decoding="async"></figure>`
+    ? `<figure class="venue__photo framed"><img class="fade-img" src="${esc(v.photo)}" alt="${esc(v.photoAlt || '')}" loading="lazy" decoding="async"></figure>`
     : '';
   const venue = `
   <section class="venue" id="venue">
@@ -651,7 +654,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   const registryHtml = registryOn ? `
       <div class="registry" lang="en">
         <p class="label">${esc(RG.label)}</p>
-        ${has(RG.image) ? `<figure class="registry__img"><img class="fade-img" src="${esc(RG.image)}" alt="${esc(RG.imageAlt || '')}" loading="lazy" decoding="async"></figure>` : ''}
+        ${has(RG.image) ? `<figure class="registry__img framed"><img class="fade-img" src="${esc(RG.image)}" alt="${esc(RG.imageAlt || '')}" loading="lazy" decoding="async"></figure>` : ''}
         <button type="button" class="registry__btn" id="openFund"><span class="registry__title">${esc(RG.title)}</span><span class="registry__sub">Gift any amount · PayPal</span></button>
       </div>` : '';
   const accountSide = (title, list) => (has(list) ? `<details class="acc"><summary>${title}${ICON.chev}</summary>${acctRows(list)}</details>` : '');
