@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="only light">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <meta name="robots" content="noindex, nofollow">
 <title>김지태 · Valeria, 결혼합니다</title>
 <meta name="description" content="2027년 2월 13일 토요일 오후 6시 30분 · 토브헤세드">
@@ -186,6 +187,8 @@ body {
 p, h1, h2, h3, h4, h5, ol, ul, figure { margin: 0; padding: 0; }
 img { max-width: 100%; }
 a { color: inherit; text-decoration: none; }
+/* 아이폰이 계좌번호 같은 숫자를 전화번호로 착각해 붙이는 자동 링크·밑줄을 없앤다 (주 해결은 build.py의 format-detection) */
+a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font: inherit !important; }
 button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 1px solid var(--peach); outline-offset: 3px; }
 
