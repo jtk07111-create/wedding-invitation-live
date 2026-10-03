@@ -115,6 +115,18 @@ window.WEDDING = {
     ],
   },
 
+  // 애프터 파티 참석 의사 (SHARE 바로 위). 버튼 → 이름(필수)·연락처·동반 인원 → 구글 설문지 'After Party 참석 의사'로 들어간다.
+  // 명단은 구글 설문지 편집 화면의 '응답' 탭에서 본다. form·fields는 그 설문지의 제출 주소와 칸 번호
+  afterParty: {
+    label: 'After Party',
+    text: '예식 후 애프터 파티를 준비하고 있습니다.\n함께하실 분은 참석 의사를 남겨 주세요.',
+    en: "We're hosting an after party following the ceremony.\nIf you'd like to join us, please let us know.",
+    note: '장소와 시간은 따로 안내드립니다',
+    noteEn: 'Venue and time will be shared separately.',
+    form: 'https://docs.google.com/forms/d/e/1FAIpQLSelnNZtctPF8ovnnaoaOQd5OPXDBnqWSP2MxhbL9IsmoXgwqQ/formResponse',
+    fields: { name: 'entry.894177476', phone: 'entry.703828982', guests: 'entry.1530719691' },
+  },
+
   share: {
     text: '소중한 분들에게 전해주세요',
     // 카카오톡 등으로 링크를 보낼 때 뜨는 제목과 설명 (build.py가 배포본 머리말에도 넣는다)
@@ -368,6 +380,33 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: #000; font-family: var(--f-display); font-size: 18px; font-weight: 300; letter-spacing: -0.01em; }
 .fund__fine { margin-top: 14px; font-size: 10.5px; line-height: 1.6; opacity: .55; }
 
+/* 애프터 파티: SHARE 바로 위. 버튼을 누르면 참석 의사 창이 뜬다 */
+.party { padding: 70px var(--gutter) 80px; text-align: right; }
+.party__text { margin-top: 35px; font-size: 12.25px; line-height: 24.5px; font-weight: 300; }
+.party__en { margin-top: 10px; font-size: 11.5px; line-height: 20px; font-weight: 300; opacity: .7; }
+.party__note { margin-top: 24px; font-size: 12.25px; line-height: 21px; font-weight: 500; }
+.party__note span { display: block; margin-top: 2px; font-size: 11.5px; line-height: 20px; font-weight: 300; opacity: .7; }
+.party__btn { margin-top: 34px; }
+/* 참석 의사 창: 틀(.fund…)은 Honeymoon Fund 창과 같고 입력칸만 따로 */
+.party__info span { display: block; margin-top: 2px; font-size: 11.5px; }
+.pf { display: block; margin-top: 18px; text-align: left; }
+.party__info + .pf { margin-top: 24px; }
+.pf__head { display: flex; align-items: baseline; justify-content: space-between; font-size: 12px; line-height: 18px; font-weight: 500; }
+.pf__head em { margin-left: 5px; font-family: var(--f-caps); font-size: 9px; font-style: normal; letter-spacing: .12em; text-transform: uppercase; opacity: .65; }
+.pf__head b, .pf__head i { font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: .02em; }
+.pf__head b { color: var(--peach); }
+.pf__head i { opacity: .55; }
+.pf__box { display: flex; align-items: center; margin-top: 2px; border-bottom: 1px solid rgba(212, 207, 200, .35); transition: border-color .2s ease; }
+.pf__box:focus-within { border-bottom-color: var(--paper); }
+.pf__box--num { width: 112px; }
+/* 16px 미만이면 아이폰이 입력할 때 화면을 확대한다 */
+.pf input { flex: 1; min-width: 0; width: 100%; padding: 8px 2px; border: 0; border-radius: 0; background: transparent; color: var(--paper); font-family: var(--f-body); font-size: 16px; line-height: 1.4; outline: none; -webkit-appearance: none; appearance: none; }
+.pf input:-webkit-autofill { -webkit-text-fill-color: var(--paper); -webkit-box-shadow: 0 0 0 40px var(--black) inset; }
+.pf__unit { flex: none; padding: 0 4px 0 8px; font-size: 13px; opacity: .7; }
+.pf__hint { display: block; margin-top: 7px; font-size: 10.5px; line-height: 1.6; opacity: .55; }
+.party__send { width: 100%; padding: 0; border: 0; cursor: pointer; }
+.party__send:disabled { opacity: .6; cursor: default; }
+
 /* 공유 */
 .share { padding: 70px var(--gutter) 120px; background: var(--black-2); text-align: right; }
 .share__rule { display: block; width: 20px; height: 1px; margin-left: auto; background: rgba(212, 207, 200, .35); }
@@ -489,6 +528,24 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     </div>
     <p class="fund__fine">You'll finish your gift securely on PayPal.</p>
   </div>
+</div>
+
+<div class="fund" id="party" role="dialog" aria-modal="true" aria-labelledby="partyTitle" hidden>
+  <form class="fund__panel" id="partyForm" novalidate>
+    <button type="button" class="fund__close" data-party="close" aria-label="닫기"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.5 5.5l11 11M16.5 5.5l-11 11"/></svg></button>
+    <p class="fund__label" id="partyLabel" lang="en"></p>
+    <h3 class="fund__title" id="partyTitle">참석 의사 전달</h3>
+    <p class="fund__text party__info" id="partyInfo"></p>
+    <label class="pf"><span class="pf__head"><span>이름 <em lang="en">Name</em></span><b>필수 · Required</b></span><span class="pf__box"><input id="pfName" name="name" autocomplete="name" maxlength="40" aria-required="true"></span></label>
+    <label class="pf"><span class="pf__head"><span>연락처 <em lang="en">Phone</em></span><i>선택 · Optional</i></span><span class="pf__box"><input id="pfPhone" name="phone" type="tel" autocomplete="tel" maxlength="30"></span></label>
+    <label class="pf"><span class="pf__head"><span>동반 인원 <em lang="en">Guests</em></span><i>선택 · Optional</i></span><span class="pf__box pf__box--num"><input id="pfGuests" name="guests" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off"><span class="pf__unit">명</span></span><span class="pf__hint">본인을 뺀 인원 수만 숫자로 적어 주세요.<br>없으면 비워 두세요.<br><span lang="en">Not counting yourself. Leave blank if none.</span></span></label>
+    <p class="fund__note" id="partyNote" role="alert"></p>
+    <div class="fund__actions">
+      <button type="button" class="fund__cancel" data-party="close">Cancel</button>
+      <button type="submit" class="fund__gift party__send" id="partySend">보내기 · Send</button>
+    </div>
+    <p class="fund__fine">남겨 주신 정보는 애프터 파티 안내에만 사용합니다.<br><span lang="en">We'll only use this to share the party details.</span></p>
+  </form>
 </div>
 
 <button type="button" class="bgm" id="bgm" aria-label="배경음악 재생" aria-pressed="false" hidden></button>
@@ -672,6 +729,19 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     </div>
   </section>` : '';
 
+  const AP = W.afterParty;
+  const partyOn = !!(AP && has(AP.form));
+  const party = partyOn ? `
+  <section class="party" id="afterparty">
+    <div data-reveal>
+      ${label(AP.label)}
+      <p class="party__text">${lines(AP.text)}</p>
+      ${has(AP.en) ? `<p class="party__en" lang="en">${lines(AP.en)}</p>` : ''}
+      ${has(AP.note) ? `<p class="party__note">${esc(AP.note)}${has(AP.noteEn) ? `<span lang="en">${esc(AP.noteEn)}</span>` : ''}</p>` : ''}
+      <button type="button" class="registry__btn party__btn" id="openParty"><span class="registry__title">참석 의사 전달</span><span class="registry__sub" lang="en">Let us know you're coming</span></button>
+    </div>
+  </section>` : '';
+
   const share = `
   <section class="share">
     <div data-reveal>
@@ -686,7 +756,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   </section>`;
 
   const app = $('#app');
-  app.innerHTML = cover + intro + playlist + calendar + gallery + venue + account + share;
+  app.innerHTML = cover + intro + playlist + calendar + gallery + venue + account + party + share;
 
   // 사진은 다 받은 다음 서서히 나타난다
   function fadeImages(scope) {
@@ -749,7 +819,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     doc.body.style.overflow = locks ? 'hidden' : '';
   }
   const stack = [];
-  const LEAVE_MS = { menu: 300, gpage: 400, lb: 250, fund: 300 };
+  const LEAVE_MS = { menu: 300, gpage: 400, lb: 250, fund: 300, party: 300 };
   function openLayer(el, opener, focusSel) {
     el.classList.remove('is-leaving');
     el.hidden = false;
@@ -884,6 +954,67 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     openLayer(fundEl, opener, '.fund__close');
   }
 
+  /* ── 애프터 파티: 이름(필수)·연락처·동반 인원을 구글 설문지로 보낸다.
+        구글은 제출 결과를 이 페이지에 돌려주지 않아서, 요청이 나가면 감사 문구를 띄운다. 실제 명단은 설문지 '응답' 탭 ── */
+  const partyEl = $('#party');
+  const partyForm = $('#partyForm');
+  const partyNote = $('#partyNote');
+  const partySend = $('#partySend');
+  const pfName = $('#pfName');
+  const pfPhone = $('#pfPhone');
+  const pfGuests = $('#pfGuests');
+  const sendLabel = partySend.textContent;
+  let partyBusy = false;
+  if (partyOn) {
+    $('#partyLabel').textContent = AP.label;
+    $('#partyInfo').innerHTML = esc(AP.note) + (has(AP.noteEn) ? `<span lang="en">${esc(AP.noteEn)}</span>` : '');
+    partyEl.addEventListener('click', e => {
+      if (e.target === partyEl || e.target.closest('[data-party="close"]')) closeLayer(partyEl);
+    });
+    // 동반 인원은 숫자만 (전각 숫자도 바꿔 받는다)
+    pfGuests.addEventListener('input', () => {
+      const n = pfGuests.value.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[^0-9]/g, '').slice(0, 2);
+      if (n !== pfGuests.value) pfGuests.value = n;
+    });
+    pfName.addEventListener('input', () => { partyNote.textContent = ''; });
+    partyForm.addEventListener('submit', e => {
+      e.preventDefault();
+      if (partyBusy) return;
+      const name = pfName.value.replace(/\s+/g, ' ').trim();
+      if (!name) {
+        partyNote.textContent = '이름을 적어 주세요 · Please enter your name.';
+        pfName.focus();
+        return;
+      }
+      const body = new URLSearchParams();
+      body.append(AP.fields.name, name);
+      const phone = pfPhone.value.replace(/\s+/g, ' ').trim();
+      if (phone) body.append(AP.fields.phone, phone);
+      if (pfGuests.value) body.append(AP.fields.guests, String(+pfGuests.value));
+      partyBusy = true;
+      partySend.disabled = true;
+      partySend.textContent = '보내는 중…';
+      partyNote.textContent = '';
+      fetch(AP.form, { method: 'POST', mode: 'no-cors', credentials: 'omit', body: body })
+        .then(() => {
+          partyForm.reset();
+          closeLayer(partyEl);
+          toast('잘 전달됐어요. 감사합니다! · Thank you!', 3200);
+        }, () => {
+          partyNote.textContent = '보내지 못했어요. 다시 눌러 주세요 · Couldn\'t send. Please try again.';
+        })
+        .then(() => {
+          partyBusy = false;
+          partySend.disabled = false;
+          partySend.textContent = sendLabel;
+        });
+    });
+  }
+  function openParty(opener) {
+    partyNote.textContent = '';
+    openLayer(partyEl, opener, '.fund__close');
+  }
+
   /* ── 공유 ── */
   const pageUrl = () => W.share.url || location.href.split('#')[0];
   function shareNative() {
@@ -900,6 +1031,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     if (t.classList.contains('tile')) return t.dataset.more ? openGpage(t) : showPhoto(+t.dataset.i, t);
     if (t.dataset.copy) return copy(t.dataset.copy, `${t.dataset.bank} 계좌번호를 복사했어요`, t.parentNode.querySelector('.acct__digits'));
     if (t.id === 'openFund') return openFund(t);
+    if (t.id === 'openParty') return openParty(t);
     if (t.id === 'shareKakao') return shareNative();
     if (t.id === 'shareLink') return copy(pageUrl(), '링크가 복사되었습니다');
   });
