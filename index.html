@@ -284,7 +284,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
 /* 인사말 + 혼주 */
 .intro { padding: 70px var(--gutter) 26px; }
-.greeting { font-family: var(--f-display); font-size: 28px; line-height: 1.375; font-weight: 400; letter-spacing: -0.04em; text-align: right; }
+.greeting { font-family: var(--f-display); font-size: 28px; line-height: 1.375; font-weight: 400; letter-spacing: -0.04em; text-align: right; text-wrap: balance; }
 .greeting__ko { margin-top: 14px; font-size: 14.5px; line-height: 24px; font-weight: 400; opacity: .8; text-align: right; }
 .people { margin-top: 157px; text-align: right; }
 .person + .person { margin-top: 17px; }
@@ -364,7 +364,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .mapbtn:active { transform: scale(.95); }
 .mapbtn__ko { display: flex; align-items: center; opacity: .8; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 /* 영어는 한국어와 같은 10px. 아주 좁은 화면(320px)에서만 버튼 밖으로 넘치지 않게 조금 줄어든다 */
-.mapbtn__en { margin-top: 3px; padding-left: .06em; font-family: var(--f-caps); font-size: 10.5px; font-size: clamp(8.6px, 2.8vw, 10.5px); line-height: 14px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; opacity: .85; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+.mapbtn__en { margin-top: 3px; padding-left: .06em; font-family: var(--f-caps); font-size: 10.5px; font-size: clamp(8.6px, 2.8vw, 10.5px); line-height: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; opacity: .85; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .mapbtn svg { width: 9px; height: 9px; margin-left: 4px; fill: none; stroke: currentColor; stroke-width: 1.2; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .mapbtn:hover .mapbtn__ko, .mapbtn:hover .mapbtn__en, .mapbtn:hover svg { opacity: 1; }
 .ways { margin-top: 36px; }
@@ -373,7 +373,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .way p { margin-top: 7px; font-size: 13.5px; line-height: 25px; font-weight: 400; }
 /* 외국인 하객용 영어 안내: 한국어 아래에 조금 작고 흐리게 */
 .way p.way__en { margin-top: 10px; font-size: 12px; line-height: 20px; opacity: .8; }
-.way__en span { display: block; margin-bottom: 2px; font-family: var(--f-caps); font-size: 10px; line-height: 15px; letter-spacing: .15em; text-transform: uppercase; }
+.way__en span { display: block; margin-bottom: 2px; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 15px; letter-spacing: .15em; text-transform: uppercase; }
 /* 두 줄로 딱 끊기도록 좁은 화면에서는 글자를 조금 줄인다 */
 .maptip { margin: 14px 4px 0; font-size: 11.5px; font-size: clamp(9.4px, 2.95vw, 11.5px); line-height: 19px; font-weight: 400; opacity: .8; }
 /* 좁은 화면에서 줄이 넘칠 때 한 단어만 다음 줄로 떨어지지 않게 줄 길이를 고르게 (지원하는 브라우저만) */
@@ -408,7 +408,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .registry__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin-top: 16px; padding: 8px 12px; border: 1px solid var(--orange); border-radius: 999px; background: var(--orange); color: #000; cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .registry__btn:active { transform: scale(.97); }
 .registry__title { font-family: var(--f-display); font-size: 18px; line-height: 22px; font-weight: 400; letter-spacing: -0.02em; }
-.registry__sub { margin-top: 2px; padding-left: .15em; font-family: var(--f-caps); font-size: 9.5px; line-height: 13px; letter-spacing: .15em; text-transform: uppercase; opacity: .8; }
+.registry__sub { margin-top: 2px; padding-left: .15em; font-family: var(--f-caps); font-weight: 700; font-size: 10.5px; line-height: 13px; letter-spacing: .15em; text-transform: uppercase; opacity: .9; }
 
 /* Honeymoon Fund 금액 창 */
 .fund { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 85; display: flex; align-items: center; justify-content: center; padding: 24px 18px; background: rgba(0, 0, 0, .72); animation: fadeIn .3s ease-in-out; }
@@ -428,7 +428,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .fund__custom input::placeholder { color: rgba(212, 207, 200, .4); font-size: 14px; }
 .fund__note { min-height: 18px; margin-top: 8px; font-size: 12px; line-height: 18px; color: #f4a28c; }
 .fund__actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; margin-top: 6px; }
-.fund__cancel { height: 46px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-caps); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+.fund__cancel { height: 46px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-caps); font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
 .fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: #000; font-family: var(--f-display); font-size: 18px; font-weight: 400; letter-spacing: -0.01em; }
 .fund__fine { margin-top: 14px; font-size: 11.5px; line-height: 1.6; opacity: .7; }
 
@@ -448,7 +448,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .pf { display: block; margin-top: 18px; text-align: left; }
 .party__info + .pf { margin-top: 24px; }
 .pf__head { display: flex; align-items: baseline; justify-content: space-between; font-size: 13px; line-height: 18px; font-weight: 500; }
-.pf__head em { margin-left: 5px; font-family: var(--f-caps); font-size: 10px; font-style: normal; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
+.pf__head em { margin-left: 5px; font-family: var(--f-caps); font-weight: 700; font-size: 10px; font-style: normal; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
 .pf__head b, .pf__head i { font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: .02em; }
 .pf__head b { color: var(--peach); }
 .pf__head i { opacity: .7; }
@@ -488,7 +488,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .share__btn + .share__btn { margin-left: 28px; }
 .share__btn i { display: flex; align-items: center; justify-content: center; width: 38.5px; height: 38.5px; border-radius: 50%; background: rgba(212, 207, 200, .08); transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .share__btn svg { width: 18px; height: 18px; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
-.share__btn span { margin-top: 9px; padding-left: .15em; font-family: var(--f-caps); font-size: 10px; line-height: 13.5px; letter-spacing: .15em; text-transform: uppercase; opacity: .9; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
+.share__btn span { margin-top: 9px; padding-left: .15em; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 13.5px; letter-spacing: .15em; text-transform: uppercase; opacity: .9; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn:hover svg, .share__btn:hover span { opacity: 1; }
 
 /* 종이 질감 */
@@ -523,7 +523,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .lb__close { top: calc(6px + env(safe-area-inset-top, 0px)); right: 8px; }
 .lb__prev { top: 50%; left: 2px; margin-top: -22px; }
 .lb__next { top: 50%; right: 2px; margin-top: -22px; }
-.lb__count { position: absolute; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; color: #bdb7ae; font-family: var(--f-caps); font-size: 11px; letter-spacing: .3em; }
+.lb__count { position: absolute; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; color: #bdb7ae; font-family: var(--f-caps); font-weight: 700; font-size: 11px; letter-spacing: .3em; }
 
 /* 배경음악: 위쪽 막대처럼 아래에 고정된 주황 음악 막대. 곡 제목·가수, 이전·재생/일시정지·다음, 위 가장자리에 재생 진행선 */
 .player { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-width: var(--col); margin: 0 auto; display: flex; align-items: center; height: calc(58px + env(safe-area-inset-bottom, 0px)); padding: 0 10px env(safe-area-inset-bottom, 0px) 21px; background: rgba(255, 99, 15, .95); color: #000; }
@@ -540,7 +540,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .player__info { flex: 1; min-width: 0; }
 .player__title, .player__artist { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .player__title { font-family: var(--f-display); font-size: 15px; line-height: 19px; font-weight: 400; letter-spacing: -0.01em; }
-.player__artist { margin-top: 1px; font-family: var(--f-caps); font-size: 10px; line-height: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+.player__artist { margin-top: 1px; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
 .player__ctrls { display: flex; align-items: center; flex: none; margin-left: 8px; }
 .player__btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: none; color: #000; cursor: pointer; }
 .player__btn svg { width: 16px; height: 16px; fill: currentColor; }
