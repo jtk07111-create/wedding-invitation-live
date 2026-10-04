@@ -156,7 +156,17 @@ window.WEDDING = {
       { src: 'images/g06.jpg', thumb: 'images/thumb/g06.jpg', pos: '76% 50%' },
     ],
   },
-  bgm: '',          // 배경음악 mp3 경로. 사용 권한이 있는 음원만
+  // 배경음악: 접속할 때마다 순서를 섞어, 왼쪽 아래 음악 버튼을 누르면 재생하고 한 곡이 끝나면 다음 곡으로 넘어간다.
+  // 파일은 곡마다 소리 크기를 맞추고(-17 LUFS) 128kbps로 줄인 것. title은 재생을 시작할 때 잠깐 뜬다
+  bgm: [
+    { src: 'music/01.mp3', title: 'Party 4 U - Charli xcx' },
+    { src: 'music/02.mp3', title: 'Honeybee - Olivia Rodrigo' },
+    { src: 'music/03.mp3', title: 'Rush - producerX' },
+    { src: 'music/04.mp3', title: 'SKY CITY - ¥$' },
+    { src: 'music/05.mp3', title: 'I Thought I Saw Your Face Today - She & Him' },
+    { src: 'music/06.mp3', title: 'BEAUTY AND THE BEAST - Ye' },
+    { src: 'music/07.mp3', title: "MAMA'S FAVORITE - Ye" },
+  ],
 };
 </script>
 
@@ -576,7 +586,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 </div>
 
 <button type="button" class="bgm" id="bgm" aria-label="배경음악 재생" aria-pressed="false" hidden></button>
-<audio id="bgmAudio" loop preload="none"></audio>
+<audio id="bgmAudio" preload="none"></audio>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
@@ -1094,16 +1104,40 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     bgm.setAttribute('aria-pressed', playing ? 'true' : 'false');
     bgm.setAttribute('aria-label', playing ? '배경음악 멈춤' : '배경음악 재생');
   };
-  if (has(W.bgm) || W.draft) {
+  // 여러 곡이면 접속할 때마다 순서를 섞고 한 곡이 끝나면 다음 곡으로 (한 곡이면 그 곡만 반복)
+  const tracks = (Array.isArray(W.bgm) ? W.bgm : has(W.bgm) ? [W.bgm] : [])
+    .map(t => (typeof t === 'string' ? { src: t, title: '' } : t)).filter(t => t && has(t.src));
+  for (let i = tracks.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = tracks[i]; tracks[i] = tracks[j]; tracks[j] = t;
+  }
+  let track = 0, wantPlay = false, fails = 0, resumeOnShow = false;
+  const loadTrack = i => { track = (i + tracks.length) % tracks.length; audio.src = tracks[track].src; };
+  const playNext = () => { loadTrack(track + 1); audio.play().catch(() => {}); };
+  if (tracks.length || W.draft) {
     bgm.hidden = false;
     setBgmIcon(false);
-    if (has(W.bgm)) audio.src = W.bgm;
+    if (tracks.length) { audio.loop = tracks.length === 1; loadTrack(0); }
     audio.addEventListener('play', () => setBgmIcon(true));
     audio.addEventListener('pause', () => setBgmIcon(false));
+    audio.addEventListener('playing', () => { fails = 0; });
+    audio.addEventListener('ended', () => { if (tracks.length > 1) playNext(); });
+    // 파일을 못 읽으면 다음 곡으로 (모든 곡이 실패하면 멈춘다)
+    audio.addEventListener('error', () => { if (wantPlay && tracks.length > 1 && ++fails < tracks.length) playNext(); });
     bgm.addEventListener('click', () => {
-      if (!has(W.bgm)) return toast('배경음악 파일(mp3)을 넣으면 여기서 재생됩니다');
-      if (audio.paused) audio.play().catch(() => toast('배경음악을 재생하지 못했어요'));
-      else audio.pause();
+      if (!tracks.length) return toast('배경음악 파일(mp3)을 넣으면 여기서 재생됩니다');
+      if (audio.paused) {
+        wantPlay = true;
+        audio.play().then(() => { if (has(tracks[track].title)) toast('♪ ' + tracks[track].title, 2400); }, () => toast('배경음악을 재생하지 못했어요'));
+      } else {
+        wantPlay = false;
+        audio.pause();
+      }
+    });
+    // 다른 앱으로 넘어가거나 화면을 끄면 잠시 멈췄다가, 돌아오면 이어서 튼다
+    doc.addEventListener('visibilitychange', () => {
+      if (doc.hidden) { resumeOnShow = !audio.paused; if (resumeOnShow) audio.pause(); }
+      else if (resumeOnShow) { resumeOnShow = false; audio.play().catch(() => {}); }
     });
   }
 
