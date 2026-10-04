@@ -39,8 +39,8 @@ window.WEDDING = {
 
   playlist: {
     title: 'Wedding playlist ♬',
-    // 제목 아래 설명: 청첩장 배경음악이 아니라 예식 날 틀 노래 목록이라는 것
-    note: '예식 날 함께 들을 노래들',
+    // 제목 아래 작은 설명: 청첩장 배경음악이 아니라 예식 날 틀 노래 목록이라는 것 (note에 한국어를 넣으면 영어 위에 함께 나온다)
+    note: '',
     noteEn: "Songs we'll play on our wedding day",
     songs: [
       'STARS - ¥$',
@@ -685,7 +685,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     <div class="playlist__shade"></div>
     <div class="playlist__body" data-reveal>
       ${label(pl.title)}
-      ${has(pl.note) ? `<p class="playlist__note">${esc(pl.note)}${has(pl.noteEn) ? `<span lang="en">${esc(pl.noteEn)}</span>` : ''}</p>` : ''}
+      ${has(pl.note) || has(pl.noteEn) ? `<p class="playlist__note">${has(pl.note) ? esc(pl.note) : ''}${has(pl.noteEn) ? `<span lang="en">${esc(pl.noteEn)}</span>` : ''}</p>` : ''}
       <ol class="songs">${pl.songs.map((s, i) => `<li>${i + 1}. ${esc(s)}</li>`).join('')}</ol>
       ${has(pl.more) ? `<p class="songs__more">${esc(pl.more)}</p>` : ''}
     </div>
