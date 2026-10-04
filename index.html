@@ -190,8 +190,9 @@ window.WEDDING = {
 @font-face { font-family: "SunBatang"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Light.woff") format("woff"); font-weight: 300; font-display: swap; }
 @font-face { font-family: "SunBatang"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Medium.woff") format("woff"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "SunBatang"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Bold.woff") format("woff"); font-weight: 700; font-display: swap; }
-/* Ortica Linear Light — Collletttivo 공식 저장소, SIL OFL 1.1 (fonts/Ortica-OFL.txt) */
+/* Ortica Linear Light·Regular — Collletttivo 공식 저장소, SIL OFL 1.1 (fonts/Ortica-OFL.txt). 큰 제목은 Regular(400) */
 @font-face { font-family: "Ortica Linear"; src: url("fonts/OrticaLinear-Light.woff2") format("woff2"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Ortica Linear"; src: url("fonts/OrticaLinear-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 
 :root {
   --orange: #ff630f;
@@ -270,7 +271,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .cover__text { padding: 0 var(--gutter); container-type: inline-size; }
 .invited { font-family: var(--f-caps); font-size: 11px; line-height: 14px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; }
 /* 원본처럼 화면 폭에 맞춰 이름 크기가 변한다 (지원하지 않는 브라우저는 36.8px) */
-.names { margin-top: 11px; font-family: var(--f-display); font-size: 36.8px; font-size: clamp(12.47px, 11.583cqi, 37.42px); line-height: 1; font-weight: 300; letter-spacing: -0.025em; }
+.names { margin-top: 11px; font-family: var(--f-display); font-size: 36.8px; font-size: clamp(12.47px, 11.583cqi, 37.42px); line-height: 1; font-weight: 400; letter-spacing: -0.025em; }
 .names .amp { margin: 0 .3em; font-family: var(--f-caps); font-size: .5em; line-height: 1; font-weight: 400; letter-spacing: 0; }
 .cover__meta { margin-top: 24px; opacity: .75; }
 .meta { font-size: 12.5px; line-height: 19px; font-weight: 400; letter-spacing: .01em; }
@@ -283,8 +284,8 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
 /* 인사말 + 혼주 */
 .intro { padding: 70px var(--gutter) 26px; }
-.greeting { font-family: var(--f-display); font-size: 26.25px; line-height: 1.375; font-weight: 300; letter-spacing: -0.04em; text-align: right; }
-.greeting__ko { margin-top: 14px; font-size: 13px; line-height: 22px; font-weight: 400; opacity: .8; text-align: right; }
+.greeting { font-family: var(--f-display); font-size: 28px; line-height: 1.375; font-weight: 400; letter-spacing: -0.04em; text-align: right; }
+.greeting__ko { margin-top: 14px; font-size: 14.5px; line-height: 24px; font-weight: 400; opacity: .8; text-align: right; }
 .people { margin-top: 157px; text-align: right; }
 .person + .person { margin-top: 17px; }
 .person__name { font-size: 13px; line-height: 22px; font-weight: 400; }
@@ -309,7 +310,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .playlist__shade { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0, 0, 0, .4); }
 .playlist__body { position: relative; padding: 98px var(--gutter) 38px; text-align: right; }
 /* 플레이리스트 제목: 작은 대문자 라벨 대신 표지 이름·인사말과 같은 글꼴로 크게 */
-.playlist .label { font-family: var(--f-display); font-size: 25px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em; text-transform: none; color: #fff; }
+.playlist .label { font-family: var(--f-display); font-size: 27px; line-height: 1.2; font-weight: 400; letter-spacing: -0.02em; text-transform: none; color: #fff; }
 /* 제목 아래 작은 설명 (예식 날 틀 노래 목록이라는 것) */
 .playlist__note { margin-top: 9px; font-size: 10.5px; line-height: 16px; font-weight: 300; color: rgba(255, 255, 255, .65); }
 .playlist__note span { display: block; font-size: 10px; }
@@ -318,10 +319,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 
 /* 달력 */
 .cal { padding: 100px var(--gutter) 70px; text-align: right; }
-.cal__date { font-family: var(--f-display); font-size: 26.25px; line-height: 31.5px; font-weight: 300; letter-spacing: -0.04em; }
+.cal__date { font-family: var(--f-display); font-size: 28px; line-height: 33px; font-weight: 400; letter-spacing: -0.04em; }
 .cal__time { margin-top: 11px; font-size: 15px; line-height: 21px; font-weight: 500; }
 .cal__en { margin-top: 6px; font-size: 12px; line-height: 19px; font-weight: 400; opacity: .8; }
-.cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 44.5px; margin-top: 45px; font-family: var(--f-display); font-size: 13.65px; font-weight: 300; letter-spacing: -0.04em; text-align: center; }
+.cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 44.5px; margin-top: 45px; font-family: var(--f-display); font-size: 14.5px; font-weight: 400; letter-spacing: -0.04em; text-align: center; }
 .cal__grid > span { display: flex; align-items: center; justify-content: center; }
 .cal__grid .sun { color: var(--sunday); }
 .cal__grid .is-wedding i { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: #000; font-style: normal; font-weight: 700; }
@@ -335,7 +336,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .tile > img, .tile > .ph, .tile__more { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .tile > img { object-fit: cover; }
 .tile__more { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 0, 0, .5); color: #fff; }
-.tile__more b { font-family: var(--f-num); font-size: 21px; line-height: 28px; font-weight: 300; }
+.tile__more b { font-family: var(--f-num); font-size: 21px; line-height: 28px; font-weight: 400; }
 .tile__more small { font-family: var(--f-num); font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase; }
 
 /* 오시는 길 */
@@ -406,7 +407,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .registry__img img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .registry__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin-top: 16px; padding: 8px 12px; border: 1px solid var(--orange); border-radius: 999px; background: var(--orange); color: #000; cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .registry__btn:active { transform: scale(.97); }
-.registry__title { font-family: var(--f-display); font-size: 17px; line-height: 22px; font-weight: 300; letter-spacing: -0.02em; }
+.registry__title { font-family: var(--f-display); font-size: 18px; line-height: 22px; font-weight: 400; letter-spacing: -0.02em; }
 .registry__sub { margin-top: 2px; padding-left: .15em; font-family: var(--f-caps); font-size: 9.5px; line-height: 13px; letter-spacing: .15em; text-transform: uppercase; opacity: .8; }
 
 /* Honeymoon Fund 금액 창 */
@@ -416,7 +417,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .fund__close { position: absolute; top: 6px; right: 6px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; background: none; color: var(--paper); cursor: pointer; }
 .fund__close svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
 .fund__label { padding-left: .3em; font-family: var(--f-caps); font-size: 11px; line-height: 15px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--peach); }
-.fund__title { margin-top: 10px; font-family: var(--f-display); font-size: 27px; line-height: 1.2; font-weight: 300; letter-spacing: -0.03em; }
+.fund__title { margin-top: 10px; font-family: var(--f-display); font-size: 28px; line-height: 1.2; font-weight: 400; letter-spacing: -0.03em; }
 .fund__text { margin-top: 12px; font-size: 13.5px; line-height: 1.75; font-weight: 400; opacity: .85; }
 .fund__amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 22px; }
 .fund__amt { height: 40px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-num); font-size: 13px; cursor: pointer; transition: all .2s ease; }
@@ -428,7 +429,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .fund__note { min-height: 18px; margin-top: 8px; font-size: 12px; line-height: 18px; color: #f4a28c; }
 .fund__actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; margin-top: 6px; }
 .fund__cancel { height: 46px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-caps); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
-.fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: #000; font-family: var(--f-display); font-size: 18px; font-weight: 300; letter-spacing: -0.01em; }
+.fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: #000; font-family: var(--f-display); font-size: 18px; font-weight: 400; letter-spacing: -0.01em; }
 .fund__fine { margin-top: 14px; font-size: 11.5px; line-height: 1.6; opacity: .7; }
 
 /* 애프터 파티: SHARE 바로 위. 버튼을 누르면 참석 의사 창이 뜬다 */
@@ -440,7 +441,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .party__btn { margin-top: 34px; }
 /* 참석 의사 창: 틀(.fund…)은 Honeymoon Fund 창과 같고 입력칸만 따로 */
 /* 한국어 제목 아래 영어 제목 (미국인 하객용) */
-.party__sub { margin-top: 6px; font-family: var(--f-display); font-size: 16px; line-height: 1.3; font-weight: 300; letter-spacing: -0.01em; opacity: .85; }
+.party__sub { margin-top: 6px; font-family: var(--f-display); font-size: 17px; line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; opacity: .85; }
 /* 좁은 화면에서 줄이 넘칠 때 한 단어만 다음 줄로 떨어지지 않게 (지원하는 브라우저만) */
 .party__info { text-wrap: balance; }
 .party__info span { display: block; margin-top: 6px; font-size: 12px; }
@@ -500,7 +501,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 /* 메뉴 */
 .menu { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 80; max-width: var(--col); margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--orange); color: #000; animation: fadeIn .3s ease-in-out; }
 .menu__close { position: absolute; top: calc(6px + env(safe-area-inset-top, 0px)); right: 17px; }
-.menu__item { padding: 6px 18px; border: 0; background: none; font-family: var(--f-display); font-size: 21px; line-height: 1.3; font-weight: 300; letter-spacing: -0.04em; cursor: pointer; }
+.menu__item { padding: 6px 18px; border: 0; background: none; font-family: var(--f-display); font-size: 22px; line-height: 1.3; font-weight: 400; letter-spacing: -0.04em; cursor: pointer; }
 /* 섹션 제목 목록: 화면이 넉넉하면 가운데, 모자라면 스크롤. 제목 아래에 작게 한국어 */
 .menu__list { display: flex; flex-direction: column; align-items: center; margin: auto 0; padding: calc(60px + env(safe-area-inset-top, 0px)) 0 40px; }
 .menu__item { display: flex; flex-direction: column; align-items: center; }
@@ -538,7 +539,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 @keyframes playerEq { from { height: 25%; } to { height: 100%; } }
 .player__info { flex: 1; min-width: 0; }
 .player__title, .player__artist { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.player__title { font-family: var(--f-display); font-size: 15px; line-height: 19px; font-weight: 300; letter-spacing: -0.01em; }
+.player__title { font-family: var(--f-display); font-size: 15px; line-height: 19px; font-weight: 400; letter-spacing: -0.01em; }
 .player__artist { margin-top: 1px; font-family: var(--f-caps); font-size: 10px; line-height: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
 .player__ctrls { display: flex; align-items: center; flex: none; margin-left: 8px; }
 .player__btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: none; color: #000; cursor: pointer; }
