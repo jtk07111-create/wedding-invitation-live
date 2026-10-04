@@ -141,6 +141,8 @@ window.WEDDING = {
 
   photos: {
     cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
+    // 인사말 배경 (흑백, 어둡게 덮임). 조금 확대해 두 사람이 글씨를 피해 왼쪽에 보이게 한다. pos = 보일 위치
+    intro: { src: 'images/intro.jpg', pos: '50% 0%' },
     // 플레이리스트 배경 (흐리게 처리됨). 따로 고르지 않아 갤러리 6번째 사진을 썼다. pos = 보일 위치
     playlist: { src: 'images/thumb/g06.jpg', pos: '100% 50%' },
     // 갤러리: 칸에는 작은 사진(thumb), 누르면 원본(src)이 화면 가득 뜬다.
@@ -262,6 +264,17 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .person__name { font-size: 11.9px; line-height: 21px; font-weight: 400; }
 .person__name b { margin-left: 7px; font-size: 14px; font-weight: 700; }
 .person__parents { margin-top: 3px; font-size: 11.9px; line-height: 17.5px; font-weight: 400; }
+/* 인사말 배경 흑백 사진: 1.35배로 키우되 오른쪽 끝을 기준으로 키워 두 사람이 왼쪽으로 비켜 보이게.
+   글씨가 놓이는 오른쪽일수록 더 어둡게 덮고, 인사말은 테마 주황 */
+.intro--photo { position: relative; overflow: hidden; background: #262626; }
+.intro__bg, .intro__shade { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+.intro__bg img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.35); transform-origin: 100% 15%; }
+/* 글씨가 있는 위(인사말)·아래(혼주)와 오른쪽을 더 어둡게, 두 사람 얼굴이 있는 가운데 왼쪽은 덜 어둡게 */
+.intro__shade { background: linear-gradient(180deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, .3)), linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .68)); }
+.intro--photo > [data-reveal] { position: relative; }
+.intro--photo .greeting, .intro--photo .greeting__ko { color: var(--orange); }
+.intro--photo .greeting__ko { font-weight: 500; opacity: 1; }
+.intro--photo .greeting, .intro--photo .greeting__ko, .intro--photo .people { text-shadow: 0 1px 10px rgba(0, 0, 0, .5); }
 
 /* 플레이리스트 */
 .playlist { position: relative; min-height: 480px; overflow: hidden; color: #fff; background: #5a554f; }
@@ -636,8 +649,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       <p class="person__parents">${p.parents.filter(has).map(esc).join(p.parentsBreak ? ' ·<br>' : ' · ')} 의 ${esc(p.relation)}</p>
     </div>`;
 
+  const introPhoto = typeof W.photos.intro === 'string' ? { src: W.photos.intro, pos: '' } : (W.photos.intro || {});
   const intro = `
-  <section class="intro">
+  <section class="intro${has(introPhoto.src) ? ' intro--photo' : ''}">
+    ${has(introPhoto.src) ? `<div class="intro__bg"><img class="fade-img" src="${esc(introPhoto.src)}" alt=""${posStyle(introPhoto.pos)} decoding="async"></div><div class="intro__shade"></div>` : ''}
     <div data-reveal>
       <p class="greeting">${esc(W.greeting)}</p>
       ${has(W.greetingKo) ? `<p class="greeting__ko">${lines(W.greetingKo)}</p>` : ''}
