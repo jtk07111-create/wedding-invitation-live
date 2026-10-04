@@ -38,18 +38,17 @@ window.WEDDING = {
   greetingKo: '저희의 사랑을 축하하는 자리에 기쁜 마음으로,\n함께해 주시면 감사하겠습니다.',   // 인사말 아래 작은 한글 번역
 
   playlist: {
-    title: 'Wedding playlist ♬',
-    // 제목 아래 작은 설명: 청첩장 배경음악이 아니라 예식 날 틀 노래 목록이라는 것 (note에 한국어를 넣으면 영어 위에 함께 나온다)
+    title: 'Playlist ♬',
+    // 제목 아래 작은 설명 (비워 두면 나오지 않는다. note는 한국어, noteEn은 그 아래 영어)
     note: '',
-    noteEn: "Songs we'll play on our wedding day",
+    noteEn: '',
+    // 청첩장 배경음악(아래 bgm)과 같은 7곡
     songs: [
-      'STARS - ¥$',
-      'Nobody New - The Marías',
+      'SKY CITY - ¥$',
       'MAMA’S FAVORITE - Ye',
-      'BIRDS OF A FEATHER - Billie Eilish',
-      'Reborn - KIDS SEE GHOSTS',
+      'BEAUTY AND THE BEAST - Ye',
       'Honeybee - Olivia Rodrigo',
-      'Ghost Town - Kanye West',
+      'Rush - Professor X',
       'Party 4 U - Charli xcx',
       'I Thought I Saw Your Face Today - She & Him',
     ],
@@ -164,11 +163,11 @@ window.WEDDING = {
   bgm: [
     { src: 'music/01.mp3', title: 'Party 4 U - Charli xcx' },
     { src: 'music/02.mp3', title: 'Honeybee - Olivia Rodrigo' },
-    { src: 'music/03.mp3', title: 'Rush - producerX' },
+    { src: 'music/03.mp3', title: 'Rush - Professor X' },
     { src: 'music/04.mp3', title: 'SKY CITY - ¥$' },
     { src: 'music/05.mp3', title: 'I Thought I Saw Your Face Today - She & Him' },
     { src: 'music/06.mp3', title: 'BEAUTY AND THE BEAST - Ye' },
-    { src: 'music/07.mp3', title: "MAMA'S FAVORITE - Ye" },
+    { src: 'music/07.mp3', title: 'MAMA’S FAVORITE - Ye' },
   ],
 };
 </script>
@@ -803,7 +802,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   </section>`;
 
   const app = $('#app');
-  app.innerHTML = cover + intro + playlist + calendar + gallery + venue + account + party + share;
+  app.innerHTML = cover + intro + calendar + gallery + venue + account + playlist + party + share;
 
   // 사진은 다 받은 다음 서서히 나타난다
   function fadeImages(scope) {
@@ -904,12 +903,12 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   const menuBtn = $('#menuOpen');
   const NAV = [
     { id: 'home', en: 'Home', ko: '처음으로' },
-    { id: 'playlist', en: pl.title, ko: '플레이리스트' },
     { id: 'date', en: 'The Date', ko: '예식 일시' },
     { id: 'gallery', en: W.gallery.title, ko: '갤러리' },
     { id: 'venue', en: 'The Venue', ko: '오시는 길' },
     { id: 'account', en: 'Account', ko: '마음 전하실 곳' },
     { id: 'registry', en: registryOn ? RG.label : '', ko: '허니문 펀드' },
+    { id: 'playlist', en: pl.title, ko: '플레이리스트' },
     { id: 'afterparty', en: partyOn ? AP.label : '', ko: '애프터 파티' },
     { id: 'share', en: 'Share', ko: '공유하기' },
   ].filter(n => has(n.en) && doc.getElementById(n.id));
