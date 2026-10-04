@@ -491,12 +491,31 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .lb__next { top: 50%; right: 2px; margin-top: -22px; }
 .lb__count { position: absolute; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; color: #bdb7ae; font-family: var(--f-caps); font-size: 10px; letter-spacing: .3em; }
 
-/* 배경음악 */
-.bgm { position: fixed; left: max(21px, calc(50% - var(--col) / 2 + 21px)); bottom: calc(21px + env(safe-area-inset-bottom, 0px)); z-index: 60; display: flex; align-items: center; justify-content: center; width: 41px; height: 41px; padding: 0; border: 0; border-radius: 50%; background: rgba(10, 10, 10, .35); color: var(--paper); cursor: pointer; }
-.bgm svg { width: 16px; height: 16px; fill: currentColor; }
-/* 음악이 시작되기 전: 버튼 둘레에 주황 고리가 은은하게 퍼진다 */
-.bgm.is-waiting { animation: bgmPulse 2s ease-out infinite; }
-@keyframes bgmPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 15, .55); } 70% { box-shadow: 0 0 0 12px rgba(255, 99, 15, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 99, 15, 0); } }
+/* 배경음악: 위쪽 막대처럼 아래에 고정된 주황 음악 막대. 곡 제목·가수, 이전·재생/일시정지·다음, 위 가장자리에 재생 진행선 */
+.player { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-width: var(--col); margin: 0 auto; display: flex; align-items: center; height: calc(58px + env(safe-area-inset-bottom, 0px)); padding: 0 10px env(safe-area-inset-bottom, 0px) 21px; background: rgba(255, 99, 15, .95); color: #000; }
+.player__progress { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(0, 0, 0, .12); }
+.player__progress i { display: block; width: 0; height: 100%; background: #000; transition: width .25s linear; }
+/* 재생 중에만 움직이는 작은 막대 세 개 */
+.player__eq { display: flex; align-items: flex-end; flex: none; width: 13px; height: 13px; margin-right: 11px; }
+.player__eq i { flex: 1; height: 30%; margin-right: 2px; background: #000; border-radius: 1px; }
+.player__eq i:last-child { margin-right: 0; }
+.player.is-playing .player__eq i { animation: playerEq .9s ease-in-out infinite alternate; }
+.player.is-playing .player__eq i:nth-child(2) { animation-delay: -.3s; }
+.player.is-playing .player__eq i:nth-child(3) { animation-delay: -.6s; }
+@keyframes playerEq { from { height: 25%; } to { height: 100%; } }
+.player__info { flex: 1; min-width: 0; }
+.player__title, .player__artist { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.player__title { font-family: var(--f-display); font-size: 14.5px; line-height: 19px; font-weight: 300; letter-spacing: -0.01em; }
+.player__artist { margin-top: 1px; font-family: var(--f-caps); font-size: 9px; line-height: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.player__ctrls { display: flex; align-items: center; flex: none; margin-left: 8px; }
+.player__btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: none; color: #000; cursor: pointer; }
+.player__btn svg { width: 16px; height: 16px; fill: currentColor; }
+/* 가운데 재생 버튼은 검은 원 */
+.player__play { width: 38px; height: 38px; margin: 0 2px; background: #000; color: var(--orange); }
+.player__play svg { width: 15px; height: 15px; }
+/* 음악이 시작되기 전: 재생 버튼 둘레에 검은 고리가 은은하게 퍼진다 */
+.player__play.is-waiting { animation: playerPulse 2s ease-out infinite; }
+@keyframes playerPulse { 0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, .45); } 70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); } }
 
 /* 안내 문구 */
 .toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 110; max-width: calc(100% - 40px); padding: 10px 16px; border-radius: 999px; background: rgba(212, 207, 200, .96); color: #111; font-family: var(--f-body); font-size: 12px; line-height: 1.5; font-weight: 500; text-align: center; transform: translateX(-50%); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
@@ -594,7 +613,19 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   </form>
 </div>
 
-<button type="button" class="bgm" id="bgm" aria-label="배경음악 재생" aria-pressed="false" hidden></button>
+<div class="player" id="player" role="region" aria-label="배경음악" hidden>
+  <div class="player__progress" aria-hidden="true"><i id="playerProgress"></i></div>
+  <span class="player__eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <div class="player__info" aria-live="polite">
+    <p class="player__title" id="playerTitle"></p>
+    <p class="player__artist" id="playerArtist" lang="en"></p>
+  </div>
+  <div class="player__ctrls">
+    <button type="button" class="player__btn" id="playerPrev" aria-label="이전 곡"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12.6 3.2v9.6L5.9 8z"/><path d="M3.2 3.4h1.7v9.2H3.2z"/></svg></button>
+    <button type="button" class="player__btn player__play" id="bgm" aria-label="배경음악 재생" aria-pressed="false"></button>
+    <button type="button" class="player__btn" id="playerNext" aria-label="다음 곡"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 3.2v9.6L10.1 8z"/><path d="M11.1 3.4h1.7v9.2h-1.7z"/></svg></button>
+  </div>
+</div>
 <audio id="bgmAudio" preload="none"></audio>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -1121,32 +1152,42 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     const j = Math.floor(Math.random() * (i + 1));
     const t = tracks[i]; tracks[i] = tracks[j]; tracks[j] = t;
   }
-  let track = 0, wantPlay = false, fails = 0, resumeOnShow = false;
-  const loadTrack = i => { track = (i + tracks.length) % tracks.length; audio.src = tracks[track].src; };
+  let track = 0, wantPlay = false, fails = 0, resumeOnShow = false, userStopped = false;
+  const player = $('#player');
+  const playerTitle = $('#playerTitle');
+  const playerArtist = $('#playerArtist');
+  const playerProgress = $('#playerProgress');
+  // "제목 - 가수"를 음악 막대의 두 줄로 나눠 보여 준다
+  const showTrack = () => {
+    const t = tracks[track].title || '';
+    const k = t.lastIndexOf(' - ');
+    playerTitle.textContent = k > 0 ? t.slice(0, k) : t;
+    playerArtist.textContent = k > 0 ? t.slice(k + 3) : '';
+    playerProgress.style.width = '0';
+  };
+  const loadTrack = i => { track = (i + tracks.length) % tracks.length; audio.src = tracks[track].src; showTrack(); };
   const playNext = () => { loadTrack(track + 1); audio.play().catch(() => {}); };
-  if (tracks.length || W.draft) {
-    bgm.hidden = false;
+  if (tracks.length) {
+    player.hidden = false;
     setBgmIcon(false);
-    if (tracks.length) { audio.loop = tracks.length === 1; loadTrack(0); }
-    audio.addEventListener('play', () => setBgmIcon(true));
-    audio.addEventListener('pause', () => setBgmIcon(false));
+    audio.loop = tracks.length === 1;
+    loadTrack(0);
+    audio.addEventListener('play', () => { setBgmIcon(true); player.classList.add('is-playing'); });
+    audio.addEventListener('pause', () => { setBgmIcon(false); player.classList.remove('is-playing'); });
     audio.addEventListener('playing', () => { fails = 0; });
     audio.addEventListener('ended', () => { if (tracks.length > 1) playNext(); });
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) playerProgress.style.width = (audio.currentTime / audio.duration * 100).toFixed(2) + '%';
+    });
     // 파일을 못 읽으면 다음 곡으로 (모든 곡이 실패하면 멈춘다)
     audio.addEventListener('error', () => { if (wantPlay && tracks.length > 1 && ++fails < tracks.length) playNext(); });
-    // 재생을 시작하고 곡 이름을 잠깐 띄운다. 막히면 false
-    let userStopped = false;
+    // 재생을 시작한다. 막히면 false
     const startMusic = () => {
-      if (!tracks.length || !audio.paused || userStopped) return Promise.resolve(false);
+      if (!audio.paused || userStopped) return Promise.resolve(false);
       wantPlay = true;
-      return audio.play().then(() => {
-        bgm.classList.remove('is-waiting');
-        if (has(tracks[track].title)) toast('♪ ' + tracks[track].title, 2400);
-        return true;
-      }, () => { wantPlay = false; return false; });
+      return audio.play().then(() => { bgm.classList.remove('is-waiting'); return true; }, () => { wantPlay = false; return false; });
     };
     bgm.addEventListener('click', () => {
-      if (!tracks.length) return toast('배경음악 파일(mp3)을 넣으면 여기서 재생됩니다');
       if (audio.paused) {
         userStopped = false;
         startMusic().then(ok => { if (!ok) toast('배경음악을 재생하지 못했어요'); });
@@ -1156,19 +1197,30 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
         audio.pause();
       }
     });
+    // 이전 곡은 3초 넘게 들었으면 그 곡 처음으로, 아니면 앞 곡으로. 이전·다음을 누르면 멈춰 있었어도 바로 튼다
+    const skip = dir => {
+      userStopped = false;
+      wantPlay = true;
+      if (dir < 0 && audio.currentTime > 3) audio.currentTime = 0;
+      else loadTrack(track + dir);
+      audio.play().then(() => bgm.classList.remove('is-waiting'), () => {});
+    };
+    $('#playerPrev').addEventListener('click', () => skip(-1));
+    $('#playerNext').addEventListener('click', () => skip(1));
     // 들어오자마자 재생을 시도한다. 휴대폰 브라우저는 대부분 화면을 한 번 누르기 전에는 소리를 막으므로,
-    // 막히면 화면 어디든 처음 누르는 순간 시작한다 (음악 버튼은 위에서 따로 처리). 그동안 버튼 둘레가 은은하게 깜빡인다
-    if (tracks.length) {
-      const GESTURES = ['pointerup', 'touchend', 'click', 'keydown'];
-      const stopListening = () => GESTURES.forEach(ev => doc.removeEventListener(ev, onFirstTouch, true));
-      const onFirstTouch = e => {
-        if (e.target && e.target.closest && e.target.closest('#bgm')) return;
-        startMusic().then(ok => { if (ok || userStopped) stopListening(); });
-      };
-      GESTURES.forEach(ev => doc.addEventListener(ev, onFirstTouch, true));
-      bgm.classList.add('is-waiting');
-      audio.addEventListener('playing', () => { bgm.classList.remove('is-waiting'); stopListening(); });
-      if (!doc.hidden) startMusic();
+    // 막히면 안내를 잠깐 띄우고 화면 어디든 처음 누르는 순간 시작한다 (음악 막대 버튼은 위에서 따로 처리).
+    // 그동안 재생 버튼 둘레가 은은하게 깜빡인다
+    const GESTURES = ['pointerup', 'touchend', 'click', 'keydown'];
+    const stopListening = () => GESTURES.forEach(ev => doc.removeEventListener(ev, onFirstTouch, true));
+    const onFirstTouch = e => {
+      if (e.target && e.target.closest && e.target.closest('#player')) return;
+      startMusic().then(ok => { if (ok || userStopped) stopListening(); });
+    };
+    GESTURES.forEach(ev => doc.addEventListener(ev, onFirstTouch, true));
+    bgm.classList.add('is-waiting');
+    audio.addEventListener('playing', () => { bgm.classList.remove('is-waiting'); stopListening(); });
+    if (!doc.hidden) {
+      startMusic().then(ok => { if (!ok && audio.paused && !userStopped) toast('♪ 화면을 누르면 음악이 나와요 · Tap anywhere for music', 2800); });
     }
     // 다른 앱으로 넘어가거나 화면을 끄면 잠시 멈췄다가, 돌아오면 이어서 튼다
     doc.addEventListener('visibilitychange', () => {
