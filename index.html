@@ -52,7 +52,7 @@ window.WEDDING = {
       'Party 4 U - Charli xcx',
       'I Thought I Saw Your Face Today - She & Him',
     ],
-    more: 'and more',
+    more: 'plays on shuffle',   // 목록 맨 아래: 접속할 때마다 순서를 섞어 튼다는 뜻
   },
 
   gallery: { title: 'Beautiful Days', show: 6 },
@@ -494,6 +494,9 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 /* 배경음악 */
 .bgm { position: fixed; left: max(21px, calc(50% - var(--col) / 2 + 21px)); bottom: calc(21px + env(safe-area-inset-bottom, 0px)); z-index: 60; display: flex; align-items: center; justify-content: center; width: 41px; height: 41px; padding: 0; border: 0; border-radius: 50%; background: rgba(10, 10, 10, .35); color: var(--paper); cursor: pointer; }
 .bgm svg { width: 16px; height: 16px; fill: currentColor; }
+/* 음악이 시작되기 전: 버튼 둘레에 주황 고리가 은은하게 퍼진다 */
+.bgm.is-waiting { animation: bgmPulse 2s ease-out infinite; }
+@keyframes bgmPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 15, .55); } 70% { box-shadow: 0 0 0 12px rgba(255, 99, 15, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 99, 15, 0); } }
 
 /* 안내 문구 */
 .toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 110; max-width: calc(100% - 40px); padding: 10px 16px; border-radius: 999px; background: rgba(212, 207, 200, .96); color: #111; font-family: var(--f-body); font-size: 12px; line-height: 1.5; font-weight: 500; text-align: center; transform: translateX(-50%); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
@@ -1131,16 +1134,42 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     audio.addEventListener('ended', () => { if (tracks.length > 1) playNext(); });
     // 파일을 못 읽으면 다음 곡으로 (모든 곡이 실패하면 멈춘다)
     audio.addEventListener('error', () => { if (wantPlay && tracks.length > 1 && ++fails < tracks.length) playNext(); });
+    // 재생을 시작하고 곡 이름을 잠깐 띄운다. 막히면 false
+    let userStopped = false;
+    const startMusic = () => {
+      if (!tracks.length || !audio.paused || userStopped) return Promise.resolve(false);
+      wantPlay = true;
+      return audio.play().then(() => {
+        bgm.classList.remove('is-waiting');
+        if (has(tracks[track].title)) toast('♪ ' + tracks[track].title, 2400);
+        return true;
+      }, () => { wantPlay = false; return false; });
+    };
     bgm.addEventListener('click', () => {
       if (!tracks.length) return toast('배경음악 파일(mp3)을 넣으면 여기서 재생됩니다');
       if (audio.paused) {
-        wantPlay = true;
-        audio.play().then(() => { if (has(tracks[track].title)) toast('♪ ' + tracks[track].title, 2400); }, () => toast('배경음악을 재생하지 못했어요'));
+        userStopped = false;
+        startMusic().then(ok => { if (!ok) toast('배경음악을 재생하지 못했어요'); });
       } else {
+        userStopped = true;
         wantPlay = false;
         audio.pause();
       }
     });
+    // 들어오자마자 재생을 시도한다. 휴대폰 브라우저는 대부분 화면을 한 번 누르기 전에는 소리를 막으므로,
+    // 막히면 화면 어디든 처음 누르는 순간 시작한다 (음악 버튼은 위에서 따로 처리). 그동안 버튼 둘레가 은은하게 깜빡인다
+    if (tracks.length) {
+      const GESTURES = ['pointerup', 'touchend', 'click', 'keydown'];
+      const stopListening = () => GESTURES.forEach(ev => doc.removeEventListener(ev, onFirstTouch, true));
+      const onFirstTouch = e => {
+        if (e.target && e.target.closest && e.target.closest('#bgm')) return;
+        startMusic().then(ok => { if (ok || userStopped) stopListening(); });
+      };
+      GESTURES.forEach(ev => doc.addEventListener(ev, onFirstTouch, true));
+      bgm.classList.add('is-waiting');
+      audio.addEventListener('playing', () => { bgm.classList.remove('is-waiting'); stopListening(); });
+      if (!doc.hidden) startMusic();
+    }
     // 다른 앱으로 넘어가거나 화면을 끄면 잠시 멈췄다가, 돌아오면 이어서 튼다
     doc.addEventListener('visibilitychange', () => {
       if (doc.hidden) { resumeOnShow = !audio.paused; if (resumeOnShow) audio.pause(); }
