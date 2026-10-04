@@ -160,13 +160,14 @@ window.WEDDING = {
     // 갤러리: 칸에는 작은 사진(thumb), 누르면 원본(src)이 화면 가득 뜬다.
     // pos = 세로 칸 안에서 보일 위치. 가로 사진에서 얼굴이 잘리지 않게 맞춘 값
     gallery: [
-      { src: 'images/cover.jpg', thumb: 'images/thumb/cover.jpg' },   // 표지 사진도 갤러리 맨 앞에 (큰 사진은 표지 파일을 그대로 쓴다)
       { src: 'images/g01.jpg', thumb: 'images/thumb/g01.jpg' },
       { src: 'images/g02.jpg', thumb: 'images/thumb/g02.jpg' },
       { src: 'images/g03.jpg', thumb: 'images/thumb/g03.jpg' },
       { src: 'images/g04.jpg', thumb: 'images/thumb/g04.jpg' },
       { src: 'images/g05.jpg', thumb: 'images/thumb/g05.jpg', pos: '50% 50%' },
       { src: 'images/g06.jpg', thumb: 'images/thumb/g06.jpg', pos: '76% 50%' },
+      // 표지 사진: 첫 화면에 이미 보이므로 맨 끝에 둬서 "+1 More"(전체 보기)에서만 보인다. 큰 사진은 표지 파일을 그대로 쓴다
+      { src: 'images/cover.jpg', thumb: 'images/thumb/cover.jpg' },
     ],
   },
   // 배경음악: 접속할 때마다 순서를 섞어, 왼쪽 아래 음악 버튼을 누르면 재생하고 한 곡이 끝나면 다음 곡으로 넘어간다.
