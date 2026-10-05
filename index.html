@@ -66,8 +66,9 @@ window.WEDDING = {
     photo: 'images/venue.jpg',
     photoAlt: '토브헤세드 예식홀 내부',
     photoAt: 'top',
-    // 약도 이미지. 비워 두면 원본 편집 화면처럼 MAP PREVIEW 자리만 보인다
-    mapImage: 'images/map.png',
+    // 약도 이미지. 사용자 요청(2026-10-06)으로 뺐다: 하객은 아래 지도 링크로 길을 찾는다. 다시 넣으려면 'images/map.png'
+    // 비워 두면 아무것도 나오지 않는다 (시안 확인용 draft에서만 MAP PREVIEW 자리가 보인다)
+    mapImage: '',
     mapAlt: '토브헤세드 약도. 7호선 학동역 10번 출구에서 도보 약 10분',
     // 세 링크 모두 '토브헤세드' 장소로 바로 열린다 (2026-09-27 확인)
     maps: [
@@ -160,9 +161,9 @@ window.WEDDING = {
   analytics: { ga: 'G-M2JDHDHWMR' },   // rangbang 계정 > jtlia-wedding-invitation-letter 속성 > 웹 스트림 '청첩장' (2026-10-05)
 
   // 테마 색: 레이아웃은 그대로, 색만 바뀐다 (색 조합은 아래 <style>의 [data-theme] 블록). orange = 처음부터 작업한 기본 색(주황 + 검정).
-  // random이 true면 들어올 때마다 list 중 하나를 무작위로 고른다. 사용자 확인(2026-10-06)으로 주황 + 브라운 두 가지를 켰다.
+  // random이 true면 들어올 때마다 list 중 하나를 무작위로 고른다. 사용자 확인(2026-10-06)으로 주황 + 브라운, 이어서 에메랄드·버터·샤르트뢰즈를 넣었다.
   // 주소 끝에 ?theme=brown 처럼 붙이면 그 색으로 고정해서 볼 수 있다. preview = 하객에게는 안 나오고 미리보기 주소로만 보는 후보
-  theme: { random: true, list: ['orange', 'brown'], preview: ['forest', 'emerald', 'cherry', 'sapphire', 'butter', 'chartreuse'] },
+  theme: { random: true, list: ['orange', 'brown', 'emerald', 'butter', 'chartreuse'], preview: ['forest', 'cherry', 'sapphire'] },
 
   photos: {
     cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
@@ -896,7 +897,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       ${v.photoAt === 'map' ? venuePhoto : ''}
       ${has(v.mapImage)
         ? `<div class="mapbox mapbox--img"><img class="fade-img" src="${esc(v.mapImage)}" alt="${esc(v.mapAlt || '오시는 길 약도')}" loading="lazy" decoding="async"></div>`
-        : `<div class="mapbox">${ICON.pin}<span>Map Preview</span></div>`}
+        : W.draft ? `<div class="mapbox">${ICON.pin}<span>Map Preview</span></div>` : ''}
       <div class="maplinks">${v.maps.map(m => `<a class="mapbtn" href="${esc(m.url)}" target="_blank" rel="noopener" data-map="${esc(m.en || m.label)}"><span class="mapbtn__ko">${esc(m.label)}${ICON.out}</span>${m.en ? `<span class="mapbtn__en">${esc(m.en)}</span>` : ''}</a>`).join('')}</div>
       ${has(v.mapTip) ? `<p class="maptip" lang="en">${lines(v.mapTip)}</p>` : ''}
       <div class="ways">${W.ways.map(w => `<div class="way"><h5>[ ${esc(w.title)} ]</h5><p>${lines(w.text)}</p>${has(w.en) ? `<p class="way__en" lang="en"><span>${esc(w.en)}</span>${lines(w.enText)}</p>` : ''}</div>`).join('')}</div>
