@@ -163,9 +163,9 @@ window.WEDDING = {
     cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
     // 인사말 배경 (흑백, 어둡게 덮임). 조금 확대해 두 사람이 글씨를 피해 왼쪽에 보이게 한다. pos = 보일 위치
     intro: { src: 'images/intro.jpg', pos: '50% 0%' },
-    // 플레이리스트 배경 (흐림 없음). 사용자 요청(2026-10-05)으로 PJS_0596 '입꼬리 수정' 계단 사진으로 바꿨다.
-    // 갤러리 2번째와 같은 사진이라 같은 파일을 쓴다. 곡 목록 아래에 두 사람이 오도록 맨 아래에 붙인다(CSS). 이전 사진: images/playlist.jpg (PJS_1136)
-    playlist: { src: 'images/g02.jpg' },
+    // 플레이리스트 배경 (흐림 없음, 원본 PJS_1136). 곡 목록은 위쪽 벚꽃·문살 위에, 두 사람은 목록 아래 공간에 오도록
+    // 사진 위쪽을 기준으로 1.23배 키운다(CSS). pos = 보일 위치
+    playlist: { src: 'images/playlist.jpg', pos: '50% 0%' },
     // 갤러리: 칸에는 작은 사진(thumb), 누르면 원본(src)이 화면 가득 뜬다.
     // pos = 세로 칸 안에서 보일 위치. 가로 사진에서 얼굴이 잘리지 않게 맞춘 값
     gallery: [
@@ -312,21 +312,17 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .intro--photo .greeting, .intro--photo .greeting__ko, .intro--photo .people { text-shadow: 0 1px 10px rgba(0, 0, 0, .5); }
 
 /* 플레이리스트 */
-/* 배경 사진(흐림 없음, PJS_0596 계단 사진): 곡 목록의 배경이 되도록 섹션 전체를 사진으로 채운다 (사용자 요청 2026-10-05).
-   'Playlist' 제목이 두 사람 머리 높이에 오고, 곡 목록은 신부 드레스 위로 겹쳐 지나간다 (사용자 요청).
-   사진 높이 = 너비 × 1.545, 신랑 머리 꼭대기는 사진 위에서 29.4%(= 너비 × 0.454) 지점이라
-   사진 위 끝을 64px(제목 위치) - 너비 × 0.454에 두면 머리가 제목과 같은 높이가 된다. 섹션은 적어도 사진 아래 끝(64px + 너비 × 1.091)까지.
-   글씨가 오른쪽 정렬이라 얼굴은 가리지 않는다. 사진이 밝아 어둡게 덮지 않고 글씨를 검게 쓴다.
-   좁은 화면에서 곡명이 두 줄이 돼 섹션이 사진보다 길어지면, 사진 아래 끝을 흐리게 녹여 같은 색 바탕(#fdfbfe)으로 잇는다 */
-.playlist { position: relative; min-height: calc(64px + min(100vw, var(--col)) * 1.091); overflow: hidden; color: #111; background: #fdfbfe; }
-.playlist__bg { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: #fdfbfe; }
-.playlist__bg img { position: absolute; left: 0; top: calc(64px - min(100vw, var(--col)) * 0.454); display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(0deg, transparent 0, #000 4%); mask-image: linear-gradient(0deg, transparent 0, #000 4%); }
-.playlist__shade { display: none; }
-.playlist__body { position: relative; padding: 64px var(--gutter) 28px; text-align: right; text-shadow: 0 0 8px rgba(253, 251, 254, .9); }
+.playlist { position: relative; min-height: 480px; overflow: hidden; color: #fff; background: #5a554f; }
+/* 배경 사진(흐림 없음): 위쪽을 기준으로 키워 두 사람이 곡 목록 아래 빈 공간(아래 여백 300px)에 오게 한다.
+   글씨가 있는 위쪽만 어둡게, 두 사람이 있는 아래쪽은 밝게 */
+.playlist__bg { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: #5a554f; }
+.playlist__bg img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.23); transform-origin: 50% 0%; }
+.playlist__shade { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(180deg, rgba(0, 0, 0, .58) 0%, rgba(0, 0, 0, .52) 52%, rgba(0, 0, 0, .12) 68%, rgba(0, 0, 0, 0) 100%); }
+.playlist__body { position: relative; padding: 64px var(--gutter) 300px; text-align: right; }
 /* 플레이리스트 제목: 작은 대문자 라벨 대신 표지 이름·인사말과 같은 글꼴로 크게 */
-.playlist .label { font-family: var(--f-display); font-size: 27px; line-height: 1.2; font-weight: 400; letter-spacing: -0.02em; text-transform: none; color: #111; }
+.playlist .label { font-family: var(--f-display); font-size: 27px; line-height: 1.2; font-weight: 400; letter-spacing: -0.02em; text-transform: none; color: #fff; }
 /* 제목 아래 작은 설명 (예식 날 틀 노래 목록이라는 것) */
-.playlist__note { margin-top: 9px; font-size: 10.5px; line-height: 16px; font-weight: 300; color: rgba(0, 0, 0, .6); }
+.playlist__note { margin-top: 9px; font-size: 10.5px; line-height: 16px; font-weight: 300; color: rgba(255, 255, 255, .65); }
 .playlist__note span { display: block; font-size: 10px; }
 .songs { margin-top: 21px; list-style: none; font-size: 13.5px; line-height: 30px; font-weight: 400; }
 .songs__more { margin-top: 28px; font-size: 13.5px; line-height: 28px; font-weight: 400; }
