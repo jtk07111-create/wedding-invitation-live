@@ -1041,8 +1041,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     const q = location.search;
     let msg = '';
     try {
-      if (/[?&]notrack\b/.test(q)) { localStorage.setItem('noTrack', '1'); msg = '이 브라우저는 방문 통계에서 뺐어요'; }
-      else if (/[?&]track\b/.test(q)) { localStorage.removeItem('noTrack'); msg = '이 브라우저도 방문 통계에 다시 넣었어요'; }
+      // 안내는 상태가 실제로 바뀔 때만 띄운다. 이미 빠진 브라우저에서 ?notrack 으로 다시 열면 정상 링크와 똑같이 보인다
+      const was = localStorage.getItem('noTrack') === '1';
+      if (/[?&]notrack\b/.test(q)) { localStorage.setItem('noTrack', '1'); if (!was) msg = '이 브라우저는 방문 통계에서 뺐어요'; }
+      else if (/[?&]track\b/.test(q)) { localStorage.removeItem('noTrack'); if (was) msg = '이 브라우저도 방문 통계에 다시 넣었어요'; }
       // 음악 안내 문구가 먼저 지나간 뒤에 띄운다
       if (msg) setTimeout(() => toast(msg, 3000), 3200);
       return localStorage.getItem('noTrack') === '1';
