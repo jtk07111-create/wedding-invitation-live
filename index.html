@@ -132,7 +132,8 @@ window.WEDDING = {
     info: '결혼식 후 인근 장소에서\n애프터 파티가 있습니다.\n장소와 시간은 따로 안내드립니다.',
     infoEn: "After the wedding, there's an after party nearby.\nWe'll let you know the place and time separately.",
     form: 'https://docs.google.com/forms/d/e/1FAIpQLSelnNZtctPF8ovnnaoaOQd5OPXDBnqWSP2MxhbL9IsmoXgwqQ/formResponse',
-    fields: { name: 'entry.894177476', song: 'entry.385132601', phone: 'entry.703828982', guests: 'entry.1530719691' },
+    // code = 설문지 5번 '방문자 코드 (Visitor code)'. 신청자 이름과 GA 방문 기록을 맞춰 보는 데 쓴다 (2026-10-05 추가)
+    fields: { name: 'entry.894177476', song: 'entry.385132601', phone: 'entry.703828982', guests: 'entry.1530719691', code: 'entry.209316380' },
   },
 
   // 하객 사진·영상 올리기 (Registry 아래, 플레이리스트 위). 고른 파일이 구글 드라이브 'Wedding photo > Wedding Invitation' 폴더로 바로 올라간다.
@@ -657,7 +658,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       <button type="button" class="fund__cancel" data-party="close">Cancel</button>
       <button type="submit" class="fund__gift party__send" id="partySend">보내기 · Send</button>
     </div>
-    <p class="fund__fine">남겨 주신 정보는 애프터 파티 안내에만 사용합니다.<br><span lang="en">We'll only use this to share the party details.</span></p>
+    <p class="fund__fine">남겨 주신 정보는 애프터 파티 안내와<br>청첩장 방문 통계에만 사용합니다.<br><span lang="en">We'll only use this for the party details and our invitation's visit stats.</span></p>
   </form>
 </div>
 
@@ -997,12 +998,22 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       return localStorage.getItem('noTrack') === '1';
     } catch (e) { return /[?&]notrack\b/.test(q); }
   })();
+  // 방문자 코드: 이 브라우저를 가리키는 무작위 5글자 (헷갈리는 0·O·1·I는 뺀다).
+  // GA에는 이 코드만 user_id로 가고, 애프터 파티 신청 때 설문에도 함께 저장해 이름과 방문 기록을 맞춰 볼 수 있다
+  const visitorCode = (() => {
+    const make = () => Array.from({ length: 5 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'.charAt(Math.floor(Math.random() * 32))).join('');
+    try {
+      let c = localStorage.getItem('vc');
+      if (!/^[A-Z2-9]{5}$/.test(c || '')) { c = make(); localStorage.setItem('vc', c); }
+      return c;
+    } catch (e) { return make(); }
+  })();
   if (has(GA_ID) && /\.github\.io$/.test(location.hostname) && !optOut) {
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag('js', new Date());
     // 광고용 연결(구글 신호·맞춤 광고)은 끈다
-    window.gtag('config', GA_ID, { allow_google_signals: false, allow_ad_personalization_signals: false });
+    window.gtag('config', GA_ID, { user_id: visitorCode, allow_google_signals: false, allow_ad_personalization_signals: false });
     const s = doc.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
@@ -1226,6 +1237,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       const phone = pfPhone.value.replace(/\s+/g, ' ').trim();
       if (phone) body.append(AP.fields.phone, phone);
       if (pfGuests.value) body.append(AP.fields.guests, String(+pfGuests.value));
+      if (AP.fields.code) body.append(AP.fields.code, visitorCode);
       partyBusy = true;
       partySend.disabled = true;
       partySend.textContent = '보내는 중…';
