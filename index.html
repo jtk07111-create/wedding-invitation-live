@@ -905,7 +905,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     </div>
   </section>` : '';
 
-  app.innerHTML = cover + intro + calendar + gallery + venue + account + moments + playlist + party + share;
+  app.innerHTML = cover + intro + calendar + gallery + venue + account + moments + party + playlist + share;
 
   // 사진은 다 받은 다음 서서히 나타난다
   function fadeImages(scope) {
@@ -1022,8 +1022,8 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     { id: 'account', en: 'Account', ko: '마음 전하실 곳' },
     { id: 'registry', en: registryOn ? RG.label : '', ko: '허니문 펀드' },
     { id: 'moments', en: momentsOn ? MOM.label : '', ko: '사진·영상 올리기' },
-    { id: 'playlist', en: pl.title, ko: '플레이리스트' },
     { id: 'afterparty', en: partyOn ? AP.label : '', ko: '애프터 파티' },
+    { id: 'playlist', en: pl.title, ko: '플레이리스트' },
     { id: 'share', en: 'Share', ko: '공유하기' },
   ].filter(n => has(n.en) && doc.getElementById(n.id));
   $('#menuList').innerHTML = NAV.map(n => `<button type="button" class="menu__item" data-menu="go" data-target="${n.id}"><span>${esc(n.en)}</span><span class="menu__ko">${esc(n.ko)}</span></button>`).join('');
