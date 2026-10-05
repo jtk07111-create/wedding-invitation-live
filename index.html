@@ -153,6 +153,10 @@ window.WEDDING = {
     url: 'https://jtk07111-create.github.io/wedding-invitation-live/',   // QR 코드가 연결된 주소
   },
 
+  // 방문 통계: 구글 애널리틱스 측정 ID (G-로 시작, danye 계정). 비워 두면 아무것도 불러오지 않는다.
+  // 공개 주소(github.io)에서만 센다. 신랑·신부 기기는 주소 끝에 ?notrack 을 붙여 한 번 열면 그 브라우저는 빠진다 (?track 으로 되돌림)
+  analytics: { ga: '' },
+
   photos: {
     cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
     // 인사말 배경 (흑백, 어둡게 덮임). 조금 확대해 두 사람이 글씨를 피해 왼쪽에 보이게 한다. pos = 보일 위치
@@ -495,6 +499,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .share__btn svg { width: 18px; height: 18px; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn span { margin-top: 9px; padding-left: .08em; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 13.5px; letter-spacing: .08em; text-transform: uppercase; opacity: .9; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn:hover svg, .share__btn:hover span { opacity: 1; }
+/* 방문 통계 고지: 맨 아래에 작고 흐리게 */
+.share__notice { margin-top: 56px; font-size: 11px; line-height: 17px; font-weight: 400; opacity: .5; }
+.share__notice span { display: block; }
+.share__notice a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 /* 종이 질감 */
 .grain {
@@ -837,16 +845,17 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       ${has(v.mapImage)
         ? `<div class="mapbox mapbox--img"><img class="fade-img" src="${esc(v.mapImage)}" alt="${esc(v.mapAlt || '오시는 길 약도')}" loading="lazy" decoding="async"></div>`
         : `<div class="mapbox">${ICON.pin}<span>Map Preview</span></div>`}
-      <div class="maplinks">${v.maps.map(m => `<a class="mapbtn" href="${esc(m.url)}" target="_blank" rel="noopener"><span class="mapbtn__ko">${esc(m.label)}${ICON.out}</span>${m.en ? `<span class="mapbtn__en">${esc(m.en)}</span>` : ''}</a>`).join('')}</div>
+      <div class="maplinks">${v.maps.map(m => `<a class="mapbtn" href="${esc(m.url)}" target="_blank" rel="noopener" data-map="${esc(m.en || m.label)}"><span class="mapbtn__ko">${esc(m.label)}${ICON.out}</span>${m.en ? `<span class="mapbtn__en">${esc(m.en)}</span>` : ''}</a>`).join('')}</div>
       ${has(v.mapTip) ? `<p class="maptip" lang="en">${lines(v.mapTip)}</p>` : ''}
       <div class="ways">${W.ways.map(w => `<div class="way"><h5>[ ${esc(w.title)} ]</h5><p>${lines(w.text)}</p>${has(w.en) ? `<p class="way__en" lang="en"><span>${esc(w.en)}</span>${lines(w.enText)}</p>` : ''}</div>`).join('')}</div>
     </div>
   </section>`;
 
-  const acctRows = list => list.map(a => `
+  // data-acct = 통계용 이름표 (groom1 = 신랑측 첫 계좌). 번호·이름 대신 이것만 보낸다
+  const acctRows = (list, side) => list.map((a, i) => `
       <div class="acct">
         <div><p class="acct__name">${esc(a.name)}</p><p class="acct__num">${esc(a.bank)}&nbsp;&nbsp;<span class="acct__digits">${esc(a.number)}</span></p></div>
-        <button type="button" class="copy" data-copy="${esc(a.number.replace(/[^0-9]/g, ''))}" data-bank="${esc(a.bank)}" aria-label="${esc(a.name)} 계좌번호 복사">${ICON.copy}</button>
+        <button type="button" class="copy" data-copy="${esc(a.number.replace(/[^0-9]/g, ''))}" data-bank="${esc(a.bank)}" data-acct="${side}${i + 1}" aria-label="${esc(a.name)} 계좌번호 복사">${ICON.copy}</button>
       </div>`).join('');
 
   const RG = W.registry;
@@ -858,14 +867,14 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
         <button type="button" class="registry__btn" id="openFund"><span class="registry__title">${esc(RG.title)}</span><span class="registry__sub">Gift any amount · PayPal</span></button>
       </div>` : '';
   // 어르신들이 헷갈리지 않게 접고 펼치지 않고 계좌번호를 늘 보여 준다
-  const accountSide = (title, list) => (has(list) ? `<div class="acc acc--open"><h4 class="acc__head">${title}</h4>${acctRows(list)}</div>` : '');
+  const accountSide = (title, list, side) => (has(list) ? `<div class="acc acc--open"><h4 class="acc__head">${title}</h4>${acctRows(list, side)}</div>` : '');
 
   const account = has(W.accounts.groom) || has(W.accounts.bride) ? `
   <section class="account" id="account">
     <div data-reveal>
       ${label('Account')}
       <p class="account__lead">${esc(W.accountLead)}</p>
-      <div class="accs">${accountSide('신랑측 계좌번호', W.accounts.groom)}${accountSide('신부측 계좌번호', W.accounts.bride)}</div>
+      <div class="accs">${accountSide('신랑측 계좌번호', W.accounts.groom, 'groom')}${accountSide('신부측 계좌번호', W.accounts.bride, 'bride')}</div>
       ${registryHtml}
     </div>
   </section>` : '';
@@ -886,6 +895,8 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   // 왓츠앱·문자로 보낼 때 미리 적어 둘 내용 (외국 하객을 위해 영어 날짜도 함께)
   const shareUrl = W.share.url || location.href.split('#')[0];
   const shareMsg = `${W.share.title}\n${W.groom.en} & ${W.bride.en} · ${enDate}\n${shareUrl}`;
+  // 방문 통계를 켜면 맨 아래에 작게 알린다 (구글 애널리틱스 약관이 요구하는 고지)
+  const GA_ID = (W.analytics && W.analytics.ga) || '';
   const share = `
   <section class="share" id="share">
     <div data-reveal>
@@ -895,10 +906,11 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       <div class="share__btns">
         <button type="button" class="share__btn" id="shareKakao"><i>${ICON.bubble}</i><span>Kakao</span></button>
         <button type="button" class="share__btn" id="shareInsta"><i>${ICON.insta}</i><span>Instagram</span></button>
-        <a class="share__btn" href="https://wa.me/?text=${encodeURIComponent(shareMsg)}" target="_blank" rel="noopener"><i>${ICON.whatsapp}</i><span>WhatsApp</span></a>
-        <a class="share__btn" href="sms:?&amp;body=${encodeURIComponent(shareMsg)}"><i>${ICON.sms}</i><span>SMS</span></a>
+        <a class="share__btn" href="https://wa.me/?text=${encodeURIComponent(shareMsg)}" target="_blank" rel="noopener" data-share="whatsapp"><i>${ICON.whatsapp}</i><span>WhatsApp</span></a>
+        <a class="share__btn" href="sms:?&amp;body=${encodeURIComponent(shareMsg)}" data-share="sms"><i>${ICON.sms}</i><span>SMS</span></a>
         <button type="button" class="share__btn" id="shareLink"><i>${ICON.link}</i><span>Link</span></button>
       </div>
+      ${has(GA_ID) ? `<p class="share__notice">방문 통계를 위해 <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google 애널리틱스</a>(쿠키)를 사용합니다.<span lang="en">This page uses Google Analytics cookies for visit statistics.</span></p>` : ''}
     </div>
   </section>`;
 
@@ -969,6 +981,33 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), () => done(legacyOk));
     else done(legacyOk);
   }
+
+  /* ── 방문 통계: 측정 ID가 있고 공개 주소(github.io)일 때만 구글 애널리틱스를 불러온다.
+        이름·연락처·계좌번호는 보내지 않고 무엇을 눌렀는지만 남긴다.
+        주소 끝에 ?notrack 을 붙여 한 번 열면 그 브라우저는 통계에서 빠진다 (신랑·신부 기기용, ?track 으로 되돌림) ── */
+  const optOut = (() => {
+    const q = location.search;
+    let msg = '';
+    try {
+      if (/[?&]notrack\b/.test(q)) { localStorage.setItem('noTrack', '1'); msg = '이 브라우저는 방문 통계에서 뺐어요'; }
+      else if (/[?&]track\b/.test(q)) { localStorage.removeItem('noTrack'); msg = '이 브라우저도 방문 통계에 다시 넣었어요'; }
+      // 음악 안내 문구가 먼저 지나간 뒤에 띄운다
+      if (msg) setTimeout(() => toast(msg, 3000), 3200);
+      return localStorage.getItem('noTrack') === '1';
+    } catch (e) { return /[?&]notrack\b/.test(q); }
+  })();
+  if (has(GA_ID) && /\.github\.io$/.test(location.hostname) && !optOut) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    // 광고용 연결(구글 신호·맞춤 광고)은 끈다
+    window.gtag('config', GA_ID, { allow_google_signals: false, allow_ad_personalization_signals: false });
+    const s = doc.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
+    doc.head.appendChild(s);
+  }
+  const logEvent = (name, params) => { if (window.gtag) window.gtag('event', name, params || {}); };
 
   /* ── 겹쳐 뜨는 창: 스크롤 잠금과 초점 돌려주기 ── */
   let locks = 0;
@@ -1051,7 +1090,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     if (!b) return;
     menuBtn.setAttribute('aria-expanded', 'false');
     closeLayer(menu);
-    if (b.dataset.menu === 'go') goTo(b.dataset.target);
+    if (b.dataset.menu === 'go') { logEvent('menu_jump', { section: b.dataset.target }); goTo(b.dataset.target); }
   });
 
   /* ── 갤러리 전체 보기 ── */
@@ -1059,7 +1098,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   $('#gpageTitle').textContent = W.gallery.title;
   $('#gpageGrid').innerHTML = tileItems.map((p, i) => tileHtml(p, i, 0)).join('');
   fadeImages($('#gpageGrid'));
-  function openGpage(opener) { openLayer(gpage, opener, '.gpage__close'); }
+  function openGpage(opener) { logEvent('gallery_all'); openLayer(gpage, opener, '.gpage__close'); }
   gpage.addEventListener('click', e => {
     if (e.target.closest('[data-gpage]')) return closeLayer(gpage);
     const t = e.target.closest('.tile');
@@ -1078,6 +1117,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   }
   function showPhoto(i, opener) {
     if (!photos.length) return toast('사진이 들어오면 크게 볼 수 있어요');
+    logEvent('photo_view', { photo: i + 1 });
     lbIndex = i;
     renderLb();
     openLayer(lb, opener, '.lb__close');
@@ -1128,16 +1168,19 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     });
     fundInput.addEventListener('input', () => { fundNote.textContent = ''; syncFund(); });
     fundGift.addEventListener('click', e => {
-      if (!syncFund()) {
+      const n = syncFund();
+      if (!n) {
         e.preventDefault();
         fundNote.textContent = 'Please choose or enter an amount.';
         return;
       }
+      logEvent('fund_paypal', { amount: n, currency: RG.currency });
       setTimeout(() => closeLayer(fundEl), 300);
       toast('Opening PayPal. Thank you so much!');
     });
   }
   function openFund(opener) {
+    logEvent('fund_open');
     fundNote.textContent = '';
     openLayer(fundEl, opener, '.fund__close');
   }
@@ -1188,6 +1231,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       partyNote.textContent = '';
       fetch(AP.form, { method: 'POST', mode: 'no-cors', credentials: 'omit', body: body })
         .then(() => {
+          logEvent('party_rsvp', { guests: +pfGuests.value || 0, song: song ? 'yes' : 'no' });
           partyForm.reset();
           closeLayer(partyEl);
           toast('잘 전달됐어요. 감사합니다! · Thank you!', 3200);
@@ -1202,6 +1246,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     });
   }
   function openParty(opener) {
+    logEvent('party_open');
     partyNote.textContent = '';
     openLayer(partyEl, opener, '.fund__close');
   }
@@ -1311,6 +1356,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     mfSend.disabled = false;
     mfSend.textContent = mfSendLabel;
     const failed = mfQueue.filter(q => q.state === 'fail').length;
+    logEvent('moments_upload', { files: todo.filter(i => mfQueue[i].state === 'done').length, failed: failed });
     mfNote.textContent = failed ? failed + '개를 올리지 못했어요. 올리기를 다시 눌러 주세요 · ' + failed + ' failed. Tap Upload to retry.' : '';
     if (!failed) toast('모두 전달됐어요. 고맙습니다! · Thank you!', 3200);
   });
@@ -1320,6 +1366,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     });
   }
   function openMoments(opener) {
+    logEvent('moments_open');
     openLayer(momentsEl, opener, '.fund__close');
   }
 
@@ -1333,9 +1380,20 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   }
 
   /* ── 본문 버튼 ── */
+  const SHARE_BY = { shareKakao: 'kakao', shareInsta: 'instagram', shareLink: 'link' };
   app.addEventListener('click', e => {
+    // 링크(지도·왓츠앱·문자·전화)는 그대로 열리고, 통계에만 남긴다
+    const a = e.target.closest('a');
+    if (a) {
+      if (a.dataset.map) logEvent('map_open', { map: a.dataset.map });
+      else if (a.dataset.share) logEvent('share', { method: a.dataset.share });
+      else if (/^tel:/.test(a.getAttribute('href') || '')) logEvent('venue_call');
+      return;
+    }
     const t = e.target.closest('button');
     if (!t) return;
+    if (t.dataset.copy) logEvent('account_copy', { account: t.dataset.acct });
+    else if (SHARE_BY[t.id]) logEvent('share', { method: SHARE_BY[t.id] });
     if (t.classList.contains('tile')) return t.dataset.more ? openGpage(t) : showPhoto(+t.dataset.i, t);
     if (t.dataset.copy) return copy(t.dataset.copy, `${t.dataset.bank} 계좌번호를 복사했어요`, t.parentNode.querySelector('.acct__digits'));
     if (t.id === 'openFund') return openFund(t);
@@ -1391,17 +1449,22 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     });
     // 파일을 못 읽으면 다음 곡으로 (모든 곡이 실패하면 멈춘다)
     audio.addEventListener('error', () => { if (wantPlay && tracks.length > 1 && ++fails < tracks.length) playNext(); });
-    // 재생을 시작한다. 막히면 false
-    const startMusic = () => {
+    // 재생을 시작한다. 막히면 false. how = 통계용 시작 방식 (auto 자동 / tap 화면 누름 / button 재생 버튼)
+    const startMusic = how => {
       if (!audio.paused || userStopped) return Promise.resolve(false);
       wantPlay = true;
-      return audio.play().then(() => { bgm.classList.remove('is-waiting'); return true; }, () => { wantPlay = false; return false; });
+      return audio.play().then(() => {
+        bgm.classList.remove('is-waiting');
+        logEvent('music_start', { how: how, song: tracks[track].title });
+        return true;
+      }, () => { wantPlay = false; return false; });
     };
     bgm.addEventListener('click', () => {
       if (audio.paused) {
         userStopped = false;
-        startMusic().then(ok => { if (!ok) toast('배경음악을 재생하지 못했어요'); });
+        startMusic('button').then(ok => { if (!ok) toast('배경음악을 재생하지 못했어요'); });
       } else {
+        logEvent('music_pause', { song: tracks[track].title });
         userStopped = true;
         wantPlay = false;
         audio.pause();
@@ -1409,6 +1472,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     });
     // 이전 곡은 3초 넘게 들었으면 그 곡 처음으로, 아니면 앞 곡으로. 이전·다음을 누르면 멈춰 있었어도 바로 튼다
     const skip = dir => {
+      logEvent('music_skip', { dir: dir > 0 ? 'next' : 'prev' });
       userStopped = false;
       wantPlay = true;
       if (dir < 0 && audio.currentTime > 3) audio.currentTime = 0;
@@ -1424,13 +1488,13 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     const stopListening = () => GESTURES.forEach(ev => doc.removeEventListener(ev, onFirstTouch, true));
     const onFirstTouch = e => {
       if (e.target && e.target.closest && e.target.closest('#player')) return;
-      startMusic().then(ok => { if (ok || userStopped) stopListening(); });
+      startMusic('tap').then(ok => { if (ok || userStopped) stopListening(); });
     };
     GESTURES.forEach(ev => doc.addEventListener(ev, onFirstTouch, true));
     bgm.classList.add('is-waiting');
     audio.addEventListener('playing', () => { bgm.classList.remove('is-waiting'); stopListening(); });
     if (!doc.hidden) {
-      startMusic().then(ok => { if (!ok && audio.paused && !userStopped) toast('♪ 화면을 누르면 음악이 나와요 · Tap anywhere for music', 2800); });
+      startMusic('auto').then(ok => { if (!ok && audio.paused && !userStopped) toast('♪ 화면을 누르면 음악이 나와요 · Tap anywhere for music', 2800); });
     }
     // 다른 앱으로 넘어가거나 화면을 끄면 잠시 멈췄다가, 돌아오면 이어서 튼다
     doc.addEventListener('visibilitychange', () => {
@@ -1474,6 +1538,16 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(start, start);
     else start();
     setTimeout(start, 3000);
+  }
+
+  /* ── 통계: 어디까지 내려 봤는지. 섹션 윗부분이 화면 위쪽 60% 안에 들어오면 한 번씩 남긴다 ── */
+  if (window.gtag && 'IntersectionObserver' in window) {
+    const seen = new IntersectionObserver(entries => entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      logEvent('section_view', { section: en.target.id });
+      seen.unobserve(en.target);
+    }), { rootMargin: '0px 0px -40% 0px' });
+    app.querySelectorAll('section[id], #registry').forEach(el => seen.observe(el));
   }
 })();
 </script>
