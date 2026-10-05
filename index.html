@@ -553,10 +553,6 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .share__btn svg { width: 18px; height: 18px; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn span { margin-top: 9px; padding-left: .08em; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 13.5px; letter-spacing: .08em; text-transform: uppercase; opacity: .9; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn:hover svg, .share__btn:hover span { opacity: 1; }
-/* 방문 통계 고지: 맨 아래에 작고 흐리게 */
-.share__notice { margin-top: 56px; font-size: 11px; line-height: 17px; font-weight: 400; opacity: .5; }
-.share__notice span { display: block; }
-.share__notice a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 /* 종이 질감 */
 .grain {
@@ -949,7 +945,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   // 왓츠앱·문자로 보낼 때 미리 적어 둘 내용 (외국 하객을 위해 영어 날짜도 함께)
   const shareUrl = W.share.url || location.href.split('#')[0];
   const shareMsg = `${W.share.title}\n${W.groom.en} & ${W.bride.en} · ${enDate}\n${shareUrl}`;
-  // 방문 통계를 켜면 맨 아래에 작게 알린다 (구글 애널리틱스 약관이 요구하는 고지)
+  // 방문 통계 측정 ID. 맨 아래 GA 고지 문구는 사용자 요청(2026-10-06)으로 뺐다
   const GA_ID = (W.analytics && W.analytics.ga) || '';
   const share = `
   <section class="share" id="share">
@@ -964,7 +960,6 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
         <a class="share__btn" href="sms:?&amp;body=${encodeURIComponent(shareMsg)}" data-share="sms"><i>${ICON.sms}</i><span>SMS</span></a>
         <button type="button" class="share__btn" id="shareLink"><i>${ICON.link}</i><span>Link</span></button>
       </div>
-      ${has(GA_ID) ? `<p class="share__notice">방문 통계를 위해 <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google 애널리틱스</a>(쿠키)를 사용합니다.<span lang="en">This page uses Google Analytics cookies for visit statistics.</span></p>` : ''}
     </div>
   </section>`;
 
