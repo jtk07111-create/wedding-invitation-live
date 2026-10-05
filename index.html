@@ -161,8 +161,8 @@ window.WEDDING = {
 
   // 테마 색: 레이아웃은 그대로, 색만 바뀐다 (색 조합은 아래 <style>의 [data-theme] 블록). orange = 처음부터 작업한 기본 색(주황 + 검정).
   // random이 true면 들어올 때마다 list 중 하나를 무작위로 고른다. 사용자 확인(2026-10-06)으로 주황 + 브라운 두 가지를 켰다.
-  // 주소 끝에 ?theme=brown 처럼 붙이면 그 색으로 고정해서 볼 수 있다 (list에 있는 것만). 다른 후보 색은 <style>에 남겨 두었다
-  theme: { random: true, list: ['orange', 'brown'] },
+  // 주소 끝에 ?theme=brown 처럼 붙이면 그 색으로 고정해서 볼 수 있다. preview = 하객에게는 안 나오고 미리보기 주소로만 보는 후보
+  theme: { random: true, list: ['orange', 'brown'], preview: ['forest', 'emerald', 'cherry', 'sapphire', 'butter', 'chartreuse'] },
 
   photos: {
     cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
@@ -203,7 +203,7 @@ window.WEDDING = {
   const T = window.WEDDING.theme || {};
   const list = T.list || [];
   const m = /[?&]theme=([a-z]+)/.exec(location.search);
-  const pick = m && list.indexOf(m[1]) >= 0 ? m[1] : T.random && list.length ? list[Math.floor(Math.random() * list.length)] : 'orange';
+  const pick = m && list.concat(T.preview || []).indexOf(m[1]) >= 0 ? m[1] : T.random && list.length ? list[Math.floor(Math.random() * list.length)] : 'orange';
   if (pick !== 'orange') document.documentElement.setAttribute('data-theme', pick);
   window.WEDDING.themeName = pick;
 })();
@@ -254,25 +254,26 @@ window.WEDDING = {
 :root[data-theme="brown"] { --orange: #3b2c23; --accent-rgb: 59, 44, 35; --on-accent: #f2e8d5; --accent-line: rgba(242, 232, 213, .45);
   --black: #1a1310; --black-2: #130e0b; --backdrop: #130e0b; --paper: #f2e8d5; --paper-rgb: 242, 232, 213; --peach: #c4a882;
   --on-paper: #1a1310; --sunday: #f87171; --accent-photo: #f2e8d5; }
-/* ── 아래는 보여 드렸던 다른 후보들. 지금은 설정의 list에 없어 쓰이지 않는다 (나중에 넣으면 바로 쓸 수 있다) ── */
-/* 포레스트 샴페인: 깊은 숲 초록 + 아이보리 + 샴페인 골드, 라벨은 세이지 (그린이 새 뉴트럴) */
-:root[data-theme="forest"] { --orange: #d8c7a0; --accent-rgb: 216, 199, 160; --on-accent: #1c261c; --black: #1f2a20; --black-2: #172017; --backdrop: #172017;
-  --paper: #ebe6d6; --paper-rgb: 235, 230, 214; --peach: #a9bf8e; --on-paper: #1c261c; --sunday: #e8907e; }
-/* 멀롯 블러시: 와인빛 버건디 + 블러시 핑크 + 더스티 로즈 */
-:root[data-theme="merlot"] { --orange: #ecc3bb; --accent-rgb: 236, 195, 187; --on-accent: #3a1218; --black: #3a1218; --black-2: #2b0c11; --backdrop: #2b0c11;
-  --paper: #f5e6e1; --paper-rgb: 245, 230, 225; --peach: #e39a93; --on-paper: #3a1218; --sunday: #ffb4a8; }
-/* 미드나잇 블루: 짙은 남색 + 페일 블루 + 샴페인 라벨 (무디 블루) */
-:root[data-theme="navy"] { --orange: #bfd1e5; --accent-rgb: 191, 209, 229; --on-accent: #121b2d; --black: #131c2e; --black-2: #0d1422; --backdrop: #0d1422;
-  --paper: #e6e3dc; --paper-rgb: 230, 227, 220; --peach: #d9c39a; --on-paper: #121b2d; --sunday: #f2a7a0; }
-/* 올리브 버터: 올리브 그린 + 버터 옐로 + 크림 */
-:root[data-theme="olive"] { --orange: #f1d98f; --accent-rgb: 241, 217, 143; --on-accent: #2a2d1f; --black: #2b2e20; --black-2: #212418; --backdrop: #212418;
-  --paper: #efe9d3; --paper-rgb: 239, 233, 211; --peach: #d6c27a; --on-paper: #2a2d1f; --sunday: #f0a08a; }
-/* 플럼 라벤더: 자두빛 보라 + 라벤더 + 더스티 핑크 */
-:root[data-theme="plum"] { --orange: #cdb6dd; --accent-rgb: 205, 182, 221; --on-accent: #2a1c2e; --black: #2a1c2e; --black-2: #1f1423; --backdrop: #1f1423;
-  --paper: #efe6f1; --paper-rgb: 239, 230, 241; --peach: #e5bcd0; --on-paper: #2a1c2e; --sunday: #f4a6b0; }
-/* 클라우드 댄서: 2026 팬톤 올해의 색(밝은 흰색) 바탕 + 모카 표지·막대 + 캐러멜 라벨 (밝은 테마) */
-:root[data-theme="cloud"] { --orange: #30231b; --accent-rgb: 48, 35, 27; --on-accent: #f0eee9; --black: #f0eee9; --black-2: #e7e3dc; --backdrop: #e7e3dc;
-  --paper: #3b302a; --paper-rgb: 59, 48, 42; --peach: #a07c5a; --on-paper: #f0eee9; --sunday: #d9534f; --accent-photo: #f0eee9; --warn: #c0392b; }
+/* ── 아래는 미리보기 후보 (2026-10-06). 하객 무작위(list)에는 없고 ?theme=이름 으로만 볼 수 있다 (설정의 preview) ── */
+/* 포레스트: 더뉴챕터 'Deep Forest'(#2e3829, 글씨 #eae8e4, 라벨 #9ca69e)를 바탕으로, 브라운처럼 첫 화면·막대는 그 녹색 그대로 두고 본문을 훨씬 어둡게 */
+:root[data-theme="forest"] { --orange: #2e3829; --accent-rgb: 46, 56, 41; --on-accent: #eae8e4; --accent-line: rgba(234, 232, 228, .45);
+  --black: #141a12; --black-2: #0e130c; --backdrop: #0e130c; --paper: #eae8e4; --paper-rgb: 234, 232, 228; --peach: #9ca69e;
+  --on-paper: #141a12; --sunday: #f87171; --accent-photo: #eae8e4; }
+/* 에메랄드: 보석빛 에메랄드 첫 화면 + 아주 짙은 숲색 본문 + 샴페인 골드 라벨 (포레스트를 더 선명하게) */
+:root[data-theme="emerald"] { --orange: #0f5c47; --accent-rgb: 15, 92, 71; --on-accent: #efe9d8; --black: #0c1813; --black-2: #08110d; --backdrop: #08110d;
+  --paper: #efe9d8; --paper-rgb: 239, 233, 216; --peach: #d6bd84; --on-paper: #0c1813; --sunday: #f87171; --accent-photo: #e4d3a6; }
+/* 체리: 진한 체리 레드 첫 화면 + 와인빛 검정 본문 + 로즈 핑크 라벨 */
+:root[data-theme="cherry"] { --orange: #9e1b32; --accent-rgb: 158, 27, 50; --on-accent: #f4e6dc; --black: #1a0a0d; --black-2: #12070a; --backdrop: #12070a;
+  --paper: #f4e6dc; --paper-rgb: 244, 230, 220; --peach: #f0a9b4; --on-paper: #1a0a0d; --sunday: #ff8a8a; --accent-photo: #f3b0b9; }
+/* 사파이어: 짙은 사파이어 블루 첫 화면 + 밤하늘색 본문 + 샴페인 골드 라벨 */
+:root[data-theme="sapphire"] { --orange: #1f3a8a; --accent-rgb: 31, 58, 138; --on-accent: #ece8de; --black: #0b1024; --black-2: #070b1a; --backdrop: #070b1a;
+  --paper: #ece8de; --paper-rgb: 236, 232, 222; --peach: #d9c08b; --on-paper: #0b1024; --sunday: #f87171; --accent-photo: #c4d4f7; }
+/* 버터: 밝은 버터 옐로 첫 화면(주황처럼 밝은 임팩트) + 짙은 올리브 검정 본문 */
+:root[data-theme="butter"] { --orange: #f1cf5e; --accent-rgb: 241, 207, 94; --on-accent: #1f1a0e; --black: #17140d; --black-2: #100e09; --backdrop: #100e09;
+  --paper: #f4ecd4; --paper-rgb: 244, 236, 212; --peach: #f1cf5e; --on-paper: #17140d; --sunday: #f87171; --accent-photo: #f1cf5e; }
+/* 샤르트뢰즈 × 버건디: 2026년에 많이 쓰이는 대담한 조합. 연두빛 첫 화면 + 버건디 본문 */
+:root[data-theme="chartreuse"] { --orange: #d4de4a; --accent-rgb: 212, 222, 74; --on-accent: #2b0b13; --black: #2b0b13; --black-2: #1f070d; --backdrop: #1f070d;
+  --paper: #f5ead9; --paper-rgb: 245, 234, 217; --peach: #d4de4a; --on-paper: #2b0b13; --sunday: #ff9a9a; --accent-photo: #d4de4a; }
 
 [hidden] { display: none !important; }
 *, *::before, *::after { box-sizing: border-box; }
