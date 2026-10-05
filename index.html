@@ -1041,9 +1041,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     const q = location.search;
     let msg = '';
     try {
-      // 안내는 상태가 실제로 바뀔 때만 띄운다. 이미 빠진 브라우저에서 ?notrack 으로 다시 열면 정상 링크와 똑같이 보인다
+      // ?notrack 으로 열 때마다 지금 상태를 알려 준다 (처음 빼면 '뺐어요', 이미 빠져 있으면 '이미 빠져 있어요').
+      // 하객과 똑같은 화면은 정상 링크로 보면 된다 (이미 빠진 브라우저는 정상 링크로 열어도 통계에 안 잡힌다)
       const was = localStorage.getItem('noTrack') === '1';
-      if (/[?&]notrack\b/.test(q)) { localStorage.setItem('noTrack', '1'); if (!was) msg = '이 브라우저는 방문 통계에서 뺐어요'; }
+      if (/[?&]notrack\b/.test(q)) { localStorage.setItem('noTrack', '1'); msg = was ? '이 브라우저는 이미 방문 통계에서 빠져 있어요' : '이 브라우저는 방문 통계에서 뺐어요'; }
       else if (/[?&]track\b/.test(q)) { localStorage.removeItem('noTrack'); if (was) msg = '이 브라우저도 방문 통계에 다시 넣었어요'; }
       // 음악 안내 문구가 먼저 지나간 뒤에 띄운다
       if (msg) setTimeout(() => toast(msg, 3000), 3200);
@@ -1505,9 +1506,12 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     setBgmIcon(false);
     audio.loop = tracks.length === 1;
     loadTrack(0);
-    audio.addEventListener('play', () => { setBgmIcon(true); player.classList.add('is-playing'); });
-    audio.addEventListener('pause', () => { setBgmIcon(false); player.classList.remove('is-playing'); });
-    audio.addEventListener('playing', () => { fails = 0; });
+    // 버튼 모양은 '실제로 소리가 나는지'로 정한다. 재생을 요청만 하고 휴대폰이 막은 경우(다른 앱에 다녀온 뒤 등)
+    // 일시정지 버튼이 남아 있지 않게, 'play'(요청)가 아니라 'playing'(소리 시작)에서 바꾼다
+    let sounding = false;
+    const markPlaying = on => { sounding = on; setBgmIcon(on); player.classList.toggle('is-playing', on); };
+    audio.addEventListener('playing', () => { fails = 0; markPlaying(true); });
+    audio.addEventListener('pause', () => markPlaying(false));
     audio.addEventListener('ended', () => { if (tracks.length > 1) playNext(); });
     audio.addEventListener('timeupdate', () => {
       if (audio.duration) playerProgress.style.width = (audio.currentTime / audio.duration * 100).toFixed(2) + '%';
@@ -1516,7 +1520,9 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     audio.addEventListener('error', () => { if (wantPlay && tracks.length > 1 && ++fails < tracks.length) playNext(); });
     // 재생을 시작한다. 막히면 false. how = 통계용 시작 방식 (auto 자동 / tap 화면 누름 / button 재생 버튼)
     const startMusic = how => {
-      if (!audio.paused || userStopped) return Promise.resolve(false);
+      if (sounding || userStopped) return Promise.resolve(false);
+      // 요청만 걸려 있고 소리가 안 나는 상태면, 누른 순간에 새로 요청해야 휴대폰이 허락한다
+      if (!audio.paused) audio.pause();
       wantPlay = true;
       return audio.play().then(() => {
         bgm.classList.remove('is-waiting');
@@ -1525,7 +1531,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       }, () => { wantPlay = false; return false; });
     };
     bgm.addEventListener('click', () => {
-      if (audio.paused) {
+      if (!sounding) {
         userStopped = false;
         startMusic('button').then(ok => { if (!ok) toast('배경음악을 재생하지 못했어요'); });
       } else {
@@ -1555,16 +1561,30 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       if (e.target && e.target.closest && e.target.closest('#player')) return;
       startMusic('tap').then(ok => { if (ok || userStopped) stopListening(); });
     };
-    GESTURES.forEach(ev => doc.addEventListener(ev, onFirstTouch, true));
+    const listenForTap = () => GESTURES.forEach(ev => doc.addEventListener(ev, onFirstTouch, true));
+    listenForTap();
     bgm.classList.add('is-waiting');
     audio.addEventListener('playing', () => { bgm.classList.remove('is-waiting'); stopListening(); });
     if (!doc.hidden) {
       startMusic('auto').then(ok => { if (!ok && audio.paused && !userStopped) toast('♪ 화면을 누르면 음악이 나와요 · Tap anywhere for music', 2800); });
     }
-    // 다른 앱으로 넘어가거나 화면을 끄면 잠시 멈췄다가, 돌아오면 이어서 튼다
+    // 다른 앱으로 넘어가거나 화면을 끄면 잠시 멈췄다가, 돌아오면 이어서 튼다.
+    // 아이폰은 돌아온 뒤 소리를 막기도 해서, 2.5초 안에 소리가 안 나면 재생 버튼으로 돌려놓고 화면을 누르면 다시 튼다
+    let resumeTimer = 0;
     doc.addEventListener('visibilitychange', () => {
-      if (doc.hidden) { resumeOnShow = !audio.paused; if (resumeOnShow) audio.pause(); }
-      else if (resumeOnShow) { resumeOnShow = false; audio.play().catch(() => {}); }
+      if (doc.hidden) { clearTimeout(resumeTimer); resumeOnShow = sounding || !audio.paused; if (resumeOnShow) audio.pause(); }
+      else if (resumeOnShow) {
+        resumeOnShow = false;
+        wantPlay = true;
+        audio.play().catch(() => {});
+        resumeTimer = setTimeout(() => {
+          if (sounding || userStopped || doc.hidden) return;
+          audio.pause();
+          bgm.classList.add('is-waiting');
+          listenForTap();
+          toast('♪ 화면을 누르면 음악이 다시 나와요 · Tap to resume music', 2800);
+        }, 2500);
+      }
     });
   }
 
