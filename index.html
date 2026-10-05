@@ -29,8 +29,9 @@ window.WEDDING = {
 
   invited: "You're Invited to the Wedding of",
   groom: { name: '김지태', en: 'Jitae', relation: '아들', parents: ['김종헌', '공미라'] },
-  // parentsBreak: 두 분 성함 사이(· 다음)에서 줄을 바꾼다
-  bride: { name: '발레리아', en: 'Valeria', relation: '딸', parents: ['Jose Alfredo Tomaylla Villafuerte', 'Aquilina Cristina Chipao Tintaya'], parentsBreak: true },
+  // parentsBreak: true면 두 분 성함 사이(· 다음)에서 줄을 바꾼다 (긴 이름용)
+  // 신부 부모님은 사용자 요청(2026-10-05)으로 이름만 짧게 쓴다. 전체 성함: Jose Alfredo Tomaylla Villafuerte · Aquilina Cristina Chipao Tintaya
+  bride: { name: '발레리아', en: 'Valeria', relation: '딸', parents: ['Jose', 'Aquilina'] },
   date: '2027-02-13T18:30:00+09:00',   // 한국 시간
 
   greeting: 'With joyful hearts, we ask you to share in the celebration of our love.',
