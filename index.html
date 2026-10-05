@@ -204,7 +204,25 @@ window.WEDDING = {
   const T = window.WEDDING.theme || {};
   const list = T.list || [];
   const m = /[?&]theme=([a-z]+)/.exec(location.search);
-  const pick = m && list.concat(T.preview || []).indexOf(m[1]) >= 0 ? m[1] : T.random && list.length ? list[Math.floor(Math.random() * list.length)] : 'orange';
+  // 카드 섞기: list의 테마를 섞어 한 번씩 차례로 보여 주고, 다 돌면 다시 섞는다 (같은 브라우저 기준, 사용자 요청 2026-10-06).
+  // 새로 섞을 때 방금 본 테마가 첫 장이 되지 않게 해서 연달아 같은 색이 나오지 않는다. 저장이 막힌 브라우저는 그냥 무작위
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  const nextFromBag = () => {
+    try {
+      let bag = JSON.parse(localStorage.getItem('themeBag') || '[]').filter(x => list.indexOf(x) >= 0);
+      const last = localStorage.getItem('themeLast');
+      if (!bag.length) {
+        bag = shuffle(list.slice());
+        if (bag.length > 1 && bag[0] === last) bag.push(bag.shift());
+      }
+      const next = bag.shift();
+      localStorage.setItem('themeBag', JSON.stringify(bag));
+      localStorage.setItem('themeLast', next);
+      return next;
+    } catch (e) { return list[Math.floor(Math.random() * list.length)]; }
+  };
+  // ?theme= 미리보기는 순서에 영향을 주지 않는다
+  const pick = m && list.concat(T.preview || []).indexOf(m[1]) >= 0 ? m[1] : T.random && list.length ? nextFromBag() : 'orange';
   if (pick !== 'orange') document.documentElement.setAttribute('data-theme', pick);
   window.WEDDING.themeName = pick;
 })();
