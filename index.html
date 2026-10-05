@@ -137,9 +137,10 @@ window.WEDDING = {
   // 하객 사진·영상 올리기 (Registry 아래, 플레이리스트 위). 고른 파일이 구글 드라이브 'Wedding photo > Wedding Invitation' 폴더로 바로 올라간다.
   // upload는 업로드 자리를 만들어 주는 구글 Apps Script 웹 앱 주소 (danye 계정에서 만든 프로젝트, 2026-10-04)
   moments: {
-    label: 'Share Your Moments',
-    text: '예식 날 찍어 주신 사진과 영상을 여기에 올려 주세요.\n두 사람에게만 전달됩니다.',
-    en: "Please share the photos and videos you took on our wedding day.\nOnly the two of us will see them.",
+    // 찍어서 올려 달라는 요구가 아니라, 담아 주셨다면 나눠 달라는 조심스러운 부탁으로 (사용자 요청)
+    label: 'Share Our Moments',
+    text: '예식 날 저희의 모습을 담아 주셨다면,\n함께 나눠 주시겠어요?\n보내 주신 사진과 영상은 저희 두 사람이\n오래도록 소중히 간직하겠습니다.',
+    en: "If you captured any moments of our day,\nwould you kindly share them with us?\nWe'll treasure every one, just the two of us.",
     upload: 'https://script.google.com/macros/s/AKfycbykekoRv6R2ZIENnN6saSYypYKtOQjHPIaum1e_Mc6JPKZzM5WYVRD7GKCeKEhMyn0gtg/exec',
   },
 
@@ -653,7 +654,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 <div class="fund" id="momentsDialog" role="dialog" aria-modal="true" aria-labelledby="momentsTitle momentsTitleEn" hidden>
   <div class="fund__panel">
     <button type="button" class="fund__close" data-moments="close" aria-label="닫기"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.5 5.5l11 11M16.5 5.5l-11 11"/></svg></button>
-    <p class="fund__label" lang="en">Share Your Moments</p>
+    <p class="fund__label" lang="en">Share Our Moments</p>
     <h3 class="fund__title" id="momentsTitle">사진·영상 올리기</h3>
     <p class="party__sub" id="momentsTitleEn" lang="en">Upload photos &amp; videos</p>
     <label class="pf"><span class="pf__head"><span>보내는 분 <em lang="en">Your name</em></span><i>선택 · Optional</i></span><span class="pf__box"><input id="mfName" maxlength="30" autocomplete="name"></span></label>
