@@ -248,12 +248,12 @@ window.WEDDING = {
    orange = 표지·위아래 막대·메뉴·버튼 바탕, on-accent = 그 위 글씨, black = 바탕, black-2 = 맨 아래(공유) 바탕,
    paper = 본문 글씨, peach = 작은 제목(라벨), on-paper = 밝은 칩·안내 문구 위 글씨 */
 /* 브라운: 더뉴챕터 편집기의 'Warm Wishes' 테마를 바탕으로 한다 (사용자가 고름, 2026-10-06).
-   원래 값(첫 화면 #3b2c23, 본문 #30231b)은 둘이 거의 같아 보인다는 사용자 피드백으로 차이를 벌렸다:
-   첫 화면·위아래 막대·메뉴는 월넛 갈색 #56402f(임팩트), 본문은 더 짙은 #2a1f18, 맨 아래는 #211812.
+   원래 값(첫 화면 #3b2c23, 본문 #30231b)은 둘이 거의 같아 보인다는 사용자 피드백으로 차이를 벌렸다.
+   사용자 지시대로 첫 화면 갈색은 그대로 두고 본문을 더 어둡게: 첫 화면·위아래 막대·메뉴 #3b2c23, 본문 #1a1310, 맨 아래 #130e0b.
    글씨는 크림 #f2e8d5, 작은 제목(라벨)은 캐러멜 #c4a882. 버튼·날짜 동그라미는 크림 테두리로 구분한다 */
-:root[data-theme="brown"] { --orange: #56402f; --accent-rgb: 86, 64, 47; --on-accent: #f2e8d5; --accent-line: rgba(242, 232, 213, .45);
-  --black: #2a1f18; --black-2: #211812; --backdrop: #211812; --paper: #f2e8d5; --paper-rgb: 242, 232, 213; --peach: #c4a882;
-  --on-paper: #2a1f18; --sunday: #f87171; --accent-photo: #f2e8d5; }
+:root[data-theme="brown"] { --orange: #3b2c23; --accent-rgb: 59, 44, 35; --on-accent: #f2e8d5; --accent-line: rgba(242, 232, 213, .45);
+  --black: #1a1310; --black-2: #130e0b; --backdrop: #130e0b; --paper: #f2e8d5; --paper-rgb: 242, 232, 213; --peach: #c4a882;
+  --on-paper: #1a1310; --sunday: #f87171; --accent-photo: #f2e8d5; }
 /* ── 아래는 보여 드렸던 다른 후보들. 지금은 설정의 list에 없어 쓰이지 않는다 (나중에 넣으면 바로 쓸 수 있다) ── */
 /* 포레스트 샴페인: 깊은 숲 초록 + 아이보리 + 샴페인 골드, 라벨은 세이지 (그린이 새 뉴트럴) */
 :root[data-theme="forest"] { --orange: #d8c7a0; --accent-rgb: 216, 199, 160; --on-accent: #1c261c; --black: #1f2a20; --black-2: #172017; --backdrop: #172017;
