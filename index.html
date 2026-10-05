@@ -159,6 +159,11 @@ window.WEDDING = {
   // 공개 주소(github.io)에서만 센다. 신랑·신부 기기는 주소 끝에 ?notrack 을 붙여 한 번 열면 그 브라우저는 빠진다 (?track 으로 되돌림)
   analytics: { ga: 'G-M2JDHDHWMR' },   // rangbang 계정 > jtlia-wedding-invitation-letter 속성 > 웹 스트림 '청첩장' (2026-10-05)
 
+  // 테마 색: 레이아웃은 그대로, 색만 바뀐다 (색 조합은 아래 <style>의 [data-theme] 블록). orange = 처음부터 작업한 기본 색(주황 + 검정).
+  // random이 true면 들어올 때마다 list 중 하나를 무작위로 고른다. 사용자 확인(2026-10-06)으로 주황 + 브라운 두 가지를 켰다.
+  // 주소 끝에 ?theme=brown 처럼 붙이면 그 색으로 고정해서 볼 수 있다 (list에 있는 것만). 다른 후보 색은 <style>에 남겨 두었다
+  theme: { random: true, list: ['orange', 'brown'] },
+
   photos: {
     cover: 'images/cover.jpg',   // 메인 사진. 가로 6 : 세로 7 칸에 맞춰 위아래가 조금 잘린다
     // 인사말 배경 (흑백, 어둡게 덮임). 조금 확대해 두 사람이 글씨를 피해 왼쪽에 보이게 한다. pos = 보일 위치
@@ -192,6 +197,16 @@ window.WEDDING = {
     { src: 'music/08.mp3', title: 'Fresh Air - Future' },
   ],
 };
+
+// 테마 고르기: 화면을 그리기 전에 정해야 색이 깜빡이지 않는다
+(() => {
+  const T = window.WEDDING.theme || {};
+  const list = T.list || [];
+  const m = /[?&]theme=([a-z]+)/.exec(location.search);
+  const pick = m && list.indexOf(m[1]) >= 0 ? m[1] : T.random && list.length ? list[Math.floor(Math.random() * list.length)] : 'orange';
+  if (pick !== 'orange') document.documentElement.setAttribute('data-theme', pick);
+  window.WEDDING.themeName = pick;
+})();
 </script>
 
 <style>
@@ -212,6 +227,15 @@ window.WEDDING = {
   --dot: #c8c2b8;
   --cream: #f4f2ed;
   --backdrop: #000000;
+  /* 테마 색: 아래 [data-theme] 블록이 이 값들을 바꾼다. -rgb는 투명도를 줄 때 rgba(var(--paper-rgb), .5)처럼 쓴다 */
+  --on-accent: #000000;       /* 주황(강조색) 바탕 위 글씨·막대 */
+  --on-paper: #111111;        /* 밝은 종이색 바탕 위 글씨 */
+  --accent-rgb: 255, 99, 15;
+  --paper-rgb: 212, 207, 200;
+  --cream-rgb: 244, 242, 237;
+  --accent-photo: var(--orange);   /* 흑백 사진 위 인사말 */
+  --accent-line: transparent;      /* 버튼·날짜 동그라미 테두리. 기본은 투명이라 예전과 똑같이 보인다 (브라운에서만 크림색) */
+  --warn: #f4a28c;
   --f-display: "Ortica Linear", "Newsreader", "SunBatang", "Noto Serif KR", serif;
   --f-caps: "Aboreto", "SunBatang", "Noto Serif KR", serif;
   --f-body: "SunBatang", "Noto Serif KR", serif;
@@ -220,6 +244,34 @@ window.WEDDING = {
   --col: 430px;
   color-scheme: only light;
 }
+/* 테마 색 조합 후보 (2026-10-05, 사용자 확인 전). 레이아웃은 그대로 두고 색만 바꾼다. 기본(:root)은 주황 + 검정.
+   orange = 표지·위아래 막대·메뉴·버튼 바탕, on-accent = 그 위 글씨, black = 바탕, black-2 = 맨 아래(공유) 바탕,
+   paper = 본문 글씨, peach = 작은 제목(라벨), on-paper = 밝은 칩·안내 문구 위 글씨 */
+/* 브라운: 더뉴챕터 편집기의 'Warm Wishes' 테마를 그대로 따른다 (사용자가 고름, 2026-10-06).
+   첫 화면·위아래 막대·메뉴는 갈색 #3b2c23(임팩트), 본문은 그보다 짙은 #30231b, 맨 아래는 #281910.
+   글씨는 크림 #f2e8d5, 작은 제목(라벨)은 캐러멜 #c4a882. 버튼·날짜 동그라미는 본문과 색이 가까워 크림 테두리로 구분한다 */
+:root[data-theme="brown"] { --orange: #3b2c23; --accent-rgb: 59, 44, 35; --on-accent: #f2e8d5; --accent-line: rgba(242, 232, 213, .45);
+  --black: #30231b; --black-2: #281910; --backdrop: #281910; --paper: #f2e8d5; --paper-rgb: 242, 232, 213; --peach: #c4a882;
+  --on-paper: #30231b; --sunday: #f87171; --accent-photo: #f2e8d5; }
+/* ── 아래는 보여 드렸던 다른 후보들. 지금은 설정의 list에 없어 쓰이지 않는다 (나중에 넣으면 바로 쓸 수 있다) ── */
+/* 포레스트 샴페인: 깊은 숲 초록 + 아이보리 + 샴페인 골드, 라벨은 세이지 (그린이 새 뉴트럴) */
+:root[data-theme="forest"] { --orange: #d8c7a0; --accent-rgb: 216, 199, 160; --on-accent: #1c261c; --black: #1f2a20; --black-2: #172017; --backdrop: #172017;
+  --paper: #ebe6d6; --paper-rgb: 235, 230, 214; --peach: #a9bf8e; --on-paper: #1c261c; --sunday: #e8907e; }
+/* 멀롯 블러시: 와인빛 버건디 + 블러시 핑크 + 더스티 로즈 */
+:root[data-theme="merlot"] { --orange: #ecc3bb; --accent-rgb: 236, 195, 187; --on-accent: #3a1218; --black: #3a1218; --black-2: #2b0c11; --backdrop: #2b0c11;
+  --paper: #f5e6e1; --paper-rgb: 245, 230, 225; --peach: #e39a93; --on-paper: #3a1218; --sunday: #ffb4a8; }
+/* 미드나잇 블루: 짙은 남색 + 페일 블루 + 샴페인 라벨 (무디 블루) */
+:root[data-theme="navy"] { --orange: #bfd1e5; --accent-rgb: 191, 209, 229; --on-accent: #121b2d; --black: #131c2e; --black-2: #0d1422; --backdrop: #0d1422;
+  --paper: #e6e3dc; --paper-rgb: 230, 227, 220; --peach: #d9c39a; --on-paper: #121b2d; --sunday: #f2a7a0; }
+/* 올리브 버터: 올리브 그린 + 버터 옐로 + 크림 */
+:root[data-theme="olive"] { --orange: #f1d98f; --accent-rgb: 241, 217, 143; --on-accent: #2a2d1f; --black: #2b2e20; --black-2: #212418; --backdrop: #212418;
+  --paper: #efe9d3; --paper-rgb: 239, 233, 211; --peach: #d6c27a; --on-paper: #2a2d1f; --sunday: #f0a08a; }
+/* 플럼 라벤더: 자두빛 보라 + 라벤더 + 더스티 핑크 */
+:root[data-theme="plum"] { --orange: #cdb6dd; --accent-rgb: 205, 182, 221; --on-accent: #2a1c2e; --black: #2a1c2e; --black-2: #1f1423; --backdrop: #1f1423;
+  --paper: #efe6f1; --paper-rgb: 239, 230, 241; --peach: #e5bcd0; --on-paper: #2a1c2e; --sunday: #f4a6b0; }
+/* 클라우드 댄서: 2026 팬톤 올해의 색(밝은 흰색) 바탕 + 모카 표지·막대 + 캐러멜 라벨 (밝은 테마) */
+:root[data-theme="cloud"] { --orange: #30231b; --accent-rgb: 48, 35, 27; --on-accent: #f0eee9; --black: #f0eee9; --black-2: #e7e3dc; --backdrop: #e7e3dc;
+  --paper: #3b302a; --paper-rgb: 59, 48, 42; --peach: #a07c5a; --on-paper: #f0eee9; --sunday: #d9534f; --accent-photo: #f0eee9; --warn: #c0392b; }
 
 [hidden] { display: none !important; }
 *, *::before, *::after { box-sizing: border-box; }
@@ -265,17 +317,17 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   height: calc(46px + env(safe-area-inset-top, 0px));
   padding: env(safe-area-inset-top, 0px) 17px 0 21px;
   color: var(--peach);
-  background: rgba(255, 99, 15, 0);
+  background: rgba(var(--accent-rgb), 0);
   transition: background-color .3s cubic-bezier(.4, 0, .2, 1), color .3s cubic-bezier(.4, 0, .2, 1);
 }
-.bar.is-solid { background: rgba(255, 99, 15, .95); color: #000; }
+.bar.is-solid { background: rgba(var(--accent-rgb), .95); color: var(--on-accent); }
 /* 왼쪽: 결혼식까지 남은 날 (D-132 / D-DAY / D+1). 표지의 주황 위에서도 읽히게 늘 검정 */
-.bar__dday { font-family: var(--f-display); font-size: 17px; line-height: 20px; font-weight: 400; letter-spacing: .01em; white-space: nowrap; color: #000; }
+.bar__dday { font-family: var(--f-display); font-size: 17px; line-height: 20px; font-weight: 400; letter-spacing: .01em; white-space: nowrap; color: var(--on-accent); }
 .bar__btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
 .bar__btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
 
 /* 표지 */
-.cover { background: var(--orange); color: #000; padding: 70px 0; }
+.cover { background: var(--orange); color: var(--on-accent); padding: 70px 0; }
 .cover__text { padding: 0 var(--gutter); container-type: inline-size; }
 .invited { font-family: var(--f-caps); font-size: 11px; line-height: 14px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; }
 /* 원본처럼 화면 폭에 맞춰 이름 크기가 변한다 (지원하지 않는 브라우저는 36.8px) */
@@ -307,7 +359,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 /* 글씨가 있는 위(인사말)·아래(혼주)와 오른쪽을 더 어둡게, 두 사람 얼굴이 있는 가운데 왼쪽은 덜 어둡게 */
 .intro__shade { background: linear-gradient(180deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, .3)), linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .68)); }
 .intro--photo > [data-reveal] { position: relative; }
-.intro--photo .greeting, .intro--photo .greeting__ko { color: var(--orange); }
+.intro--photo .greeting, .intro--photo .greeting__ko { color: var(--accent-photo); }
 .intro--photo .greeting__ko { font-weight: 500; opacity: 1; }
 .intro--photo .greeting, .intro--photo .greeting__ko, .intro--photo .people { text-shadow: 0 1px 10px rgba(0, 0, 0, .5); }
 
@@ -335,7 +387,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 44.5px; margin-top: 45px; font-family: var(--f-display); font-size: 14.5px; font-weight: 400; letter-spacing: -0.04em; text-align: center; }
 .cal__grid > span { display: flex; align-items: center; justify-content: center; }
 .cal__grid .sun { color: var(--sunday); }
-.cal__grid .is-wedding i { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: #000; font-style: normal; font-weight: 700; }
+.cal__grid .is-wedding i { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: var(--on-accent); box-shadow: 0 0 0 1px var(--accent-line); font-style: normal; font-weight: 700; }
 
 /* 갤러리 */
 .gallery { padding: 70px 17px 53px; }
@@ -358,7 +410,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .venue__photo img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .venue__photo + .venue__name { margin-top: 30px; }
 /* 사진 액자: 사진에서 6px 떨어진 얇은 흰 선 + 사진 가장자리의 옅은 선 (자리 차지 없이 바깥에 그린다) */
-.framed { outline: 1px solid rgba(244, 242, 237, .7); outline-offset: 6px; box-shadow: 0 0 0 1px rgba(244, 242, 237, .2); }
+.framed { outline: 1px solid rgba(var(--cream-rgb), .7); outline-offset: 6px; box-shadow: 0 0 0 1px rgba(var(--cream-rgb), .2); }
 .venue__photo + .mapbox { margin-top: 12px; }
 .venue__line { font-size: 13.5px; line-height: 21px; font-weight: 400; }
 .venue__name + .venue__line { margin-top: 7px; }
@@ -370,7 +422,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .mapbox--img img { display: block; width: 100%; height: auto; }
 .maplinks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 27px 4px 0; }
 /* 한국어 이름 아래에 영어 이름(외국인 하객용)을 한 줄 더 */
-.mapbtn { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50px; padding: 7px 4px; border: 1px solid rgba(212, 207, 200, .2); border-radius: 999px; background: rgba(212, 207, 200, .08); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); font-size: 11px; line-height: 15px; font-weight: 500; letter-spacing: .025em; white-space: nowrap; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.mapbtn { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50px; padding: 7px 4px; border: 1px solid rgba(var(--paper-rgb), .2); border-radius: 999px; background: rgba(var(--paper-rgb), .08); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); font-size: 11px; line-height: 15px; font-weight: 500; letter-spacing: .025em; white-space: nowrap; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .mapbtn:active { transform: scale(.95); }
 .mapbtn__ko { display: flex; align-items: center; opacity: .8; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 /* 영어는 한국어와 같은 10px. 아주 좁은 화면(320px)에서만 버튼 밖으로 넘치지 않게 조금 줄어든다 */
@@ -406,7 +458,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .acct { display: flex; align-items: center; justify-content: space-between; padding: 9px 7px 13px 14px; }
 .acct__name { font-size: 13.5px; line-height: 17.5px; font-weight: 500; }
 .acct__num { margin-top: 3px; font-size: 15px; line-height: 21px; font-weight: 400; font-variant-numeric: tabular-nums; }
-.copy { display: flex; align-items: center; justify-content: center; flex: none; width: 30px; height: 30px; margin-left: 12px; padding: 0; border: 1px solid rgba(212, 207, 200, .2); background: rgba(212, 207, 200, .08); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); cursor: pointer; transition: color .15s cubic-bezier(.4, 0, .2, 1), background-color .15s cubic-bezier(.4, 0, .2, 1), border-color .15s cubic-bezier(.4, 0, .2, 1); }
+.copy { display: flex; align-items: center; justify-content: center; flex: none; width: 30px; height: 30px; margin-left: 12px; padding: 0; border: 1px solid rgba(var(--paper-rgb), .2); background: rgba(var(--paper-rgb), .08); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); cursor: pointer; transition: color .15s cubic-bezier(.4, 0, .2, 1), background-color .15s cubic-bezier(.4, 0, .2, 1), border-color .15s cubic-bezier(.4, 0, .2, 1); }
 .copy svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.2; }
 
 /* 계좌 목록 아래 별도 파트: Registry (미국식 축의금). 펼치지 않아도 늘 보인다 */
@@ -415,7 +467,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .registry__img + .registry__btn { margin-top: 26px; }
 .registry__img::before { content: ""; display: block; padding-top: 100%; }
 .registry__img img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-.registry__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin-top: 16px; padding: 8px 12px; border: 1px solid var(--orange); border-radius: 999px; background: var(--orange); color: #000; cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.registry__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin-top: 16px; padding: 8px 12px; border: 1px solid var(--accent-line); border-radius: 999px; background: var(--orange); color: var(--on-accent); cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .registry__btn:active { transform: scale(.97); }
 .registry__title { font-family: var(--f-display); font-size: 18px; line-height: 22px; font-weight: 400; letter-spacing: -0.02em; }
 .registry__sub { margin-top: 2px; padding-left: .15em; font-family: var(--f-caps); font-weight: 700; font-size: 10.5px; line-height: 13px; letter-spacing: .15em; text-transform: uppercase; opacity: .9; }
@@ -423,23 +475,23 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 /* Honeymoon Fund 금액 창 */
 .fund { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 85; display: flex; align-items: center; justify-content: center; padding: 24px 18px; background: rgba(0, 0, 0, .72); animation: fadeIn .3s ease-in-out; }
 .fund.is-leaving { animation: fadeOut .3s ease-in-out forwards; }
-.fund__panel { position: relative; width: 100%; max-width: 340px; max-height: 100%; overflow-y: auto; padding: 36px 24px 24px; border: 1px solid rgba(212, 207, 200, .18); background: var(--black); color: var(--paper); text-align: center; }
+.fund__panel { position: relative; width: 100%; max-width: 340px; max-height: 100%; overflow-y: auto; padding: 36px 24px 24px; border: 1px solid rgba(var(--paper-rgb), .18); background: var(--black); color: var(--paper); text-align: center; }
 .fund__close { position: absolute; top: 6px; right: 6px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; background: none; color: var(--paper); cursor: pointer; }
 .fund__close svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
 .fund__label { padding-left: .3em; font-family: var(--f-caps); font-size: 11px; line-height: 15px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--peach); }
 .fund__title { margin-top: 10px; font-family: var(--f-display); font-size: 28px; line-height: 1.2; font-weight: 400; letter-spacing: -0.03em; }
 .fund__text { margin-top: 12px; font-size: 13.5px; line-height: 1.75; font-weight: 400; opacity: .85; }
 .fund__amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 22px; }
-.fund__amt { height: 40px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-num); font-size: 13px; cursor: pointer; transition: all .2s ease; }
-.fund__amt[aria-pressed="true"] { border-color: var(--paper); background: var(--paper); color: #111; }
-.fund__custom { display: flex; align-items: center; margin-top: 14px; border-bottom: 1px solid rgba(212, 207, 200, .35); }
+.fund__amt { height: 40px; padding: 0; border: 1px solid rgba(var(--paper-rgb), .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-num); font-size: 13px; cursor: pointer; transition: all .2s ease; }
+.fund__amt[aria-pressed="true"] { border-color: var(--paper); background: var(--paper); color: var(--on-paper); }
+.fund__custom { display: flex; align-items: center; margin-top: 14px; border-bottom: 1px solid rgba(var(--paper-rgb), .35); }
 .fund__custom span { padding-left: 4px; font-family: var(--f-num); font-size: 18px; opacity: .7; }
 .fund__custom input { flex: 1; min-width: 0; padding: 8px 6px; border: 0; background: transparent; color: var(--paper); font-family: var(--f-num); font-size: 18px; outline: none; }
-.fund__custom input::placeholder { color: rgba(212, 207, 200, .4); font-size: 14px; }
-.fund__note { min-height: 18px; margin-top: 8px; font-size: 12px; line-height: 18px; color: #f4a28c; }
+.fund__custom input::placeholder { color: rgba(var(--paper-rgb), .4); font-size: 14px; }
+.fund__note { min-height: 18px; margin-top: 8px; font-size: 12px; line-height: 18px; color: var(--warn); }
 .fund__actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; margin-top: 6px; }
-.fund__cancel { height: 46px; padding: 0; border: 1px solid rgba(212, 207, 200, .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-caps); font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
-.fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: #000; font-family: var(--f-display); font-size: 18px; font-weight: 400; letter-spacing: -0.01em; }
+.fund__cancel { height: 46px; padding: 0; border: 1px solid rgba(var(--paper-rgb), .25); border-radius: 999px; background: transparent; color: var(--paper); font-family: var(--f-caps); font-weight: 700; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+.fund__gift { display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 999px; background: var(--orange); color: var(--on-accent); box-shadow: 0 0 0 1px var(--accent-line); font-family: var(--f-display); font-size: 18px; font-weight: 400; letter-spacing: -0.01em; }
 .fund__fine { margin-top: 14px; font-size: 11.5px; line-height: 1.6; opacity: .7; }
 
 /* 애프터 파티: SHARE 바로 위. 버튼을 누르면 참석 의사 창이 뜬다 */
@@ -462,42 +514,42 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .pf__head b, .pf__head i { font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: .02em; }
 .pf__head b { color: var(--peach); }
 .pf__head i { opacity: .7; }
-.pf__box { display: flex; align-items: center; margin-top: 2px; border-bottom: 1px solid rgba(212, 207, 200, .35); transition: border-color .2s ease; }
+.pf__box { display: flex; align-items: center; margin-top: 2px; border-bottom: 1px solid rgba(var(--paper-rgb), .35); transition: border-color .2s ease; }
 .pf__box:focus-within { border-bottom-color: var(--paper); }
 .pf__box--num { width: 112px; }
 /* 16px 미만이면 아이폰이 입력할 때 화면을 확대한다 */
 .pf input { flex: 1; min-width: 0; width: 100%; padding: 8px 2px; border: 0; border-radius: 0; background: transparent; color: var(--paper); font-family: var(--f-body); font-size: 16px; line-height: 1.4; outline: none; -webkit-appearance: none; appearance: none; }
 .pf input:-webkit-autofill { -webkit-text-fill-color: var(--paper); -webkit-box-shadow: 0 0 0 40px var(--black) inset; }
 .pf__unit { flex: none; padding: 0 4px 0 8px; font-size: 13px; opacity: .7; }
-.pf input::placeholder { color: rgba(212, 207, 200, .4); font-size: 13px; }
+.pf input::placeholder { color: rgba(var(--paper-rgb), .4); font-size: 13px; }
 .pf__hint { display: block; margin-top: 7px; font-size: 11.5px; line-height: 1.6; opacity: .7; }
 /* 하객 사진·영상 올리기: 섹션은 After Party와 같은 모양, 창은 같은 틀(.fund…)에 파일 고르기·목록·진행 막대 */
 .moments { padding: 70px var(--gutter) 80px; text-align: right; }
-.mf__pick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 66px; margin-top: 18px; padding: 10px; border: 1px dashed rgba(212, 207, 200, .45); border-radius: 12px; font-size: 13px; line-height: 1.4; cursor: pointer; }
+.mf__pick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 66px; margin-top: 18px; padding: 10px; border: 1px dashed rgba(var(--paper-rgb), .45); border-radius: 12px; font-size: 13px; line-height: 1.4; cursor: pointer; }
 .mf__pick span { margin-top: 2px; font-size: 11.5px; opacity: .75; }
 .mf__pick input { position: absolute; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .mf__list { list-style: none; max-height: 30vh; overflow-y: auto; margin-top: 10px; text-align: left; }
-.mf__item { display: flex; flex-wrap: wrap; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgba(212, 207, 200, .12); font-size: 12.5px; line-height: 16px; }
+.mf__item { display: flex; flex-wrap: wrap; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgba(var(--paper-rgb), .12); font-size: 12.5px; line-height: 16px; }
 .mf__name { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .mf__size { flex: none; margin-left: 8px; font-family: var(--f-num); font-size: 11.5px; opacity: .7; }
-.mf__bar { flex: 0 0 100%; height: 2px; margin-top: 5px; background: rgba(212, 207, 200, .15); }
+.mf__bar { flex: 0 0 100%; height: 2px; margin-top: 5px; background: rgba(var(--paper-rgb), .15); }
 .mf__bar i { display: block; width: 0; height: 100%; background: var(--orange); transition: width .2s linear; }
 .mf__state { flex: 0 0 100%; margin-top: 3px; font-size: 11px; opacity: .8; }
 .mf__item.is-done .mf__bar i { background: #7bc67b; }
-.mf__item.is-fail .mf__state { color: #f4a28c; opacity: 1; }
+.mf__item.is-fail .mf__state { color: var(--warn); opacity: 1; }
 .party__send { width: 100%; padding: 0; border: 0; cursor: pointer; }
 .party__send:disabled { opacity: .6; cursor: default; }
 
 /* 공유 */
 .share { padding: 70px var(--gutter) 120px; background: var(--black-2); text-align: right; }
-.share__rule { display: block; width: 20px; height: 1px; margin-left: auto; background: rgba(212, 207, 200, .35); }
+.share__rule { display: block; width: 20px; height: 1px; margin-left: auto; background: rgba(var(--paper-rgb), .35); }
 .share .label { margin-top: 35px; }
 .share__text { margin-top: 14px; font-size: 13.5px; line-height: 24.5px; font-weight: 400; }
 /* 공유 버튼 5개: 오른쪽 정렬, 좁은 화면에서 넘치면 다음 줄로 */
 .share__btns { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16px 14px; margin-top: 42px; }
 .share__btn { display: flex; flex-direction: column; align-items: center; padding: 0; border: 0; background: none; cursor: pointer; transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .share__btn { min-width: 38.5px; color: inherit; }
-.share__btn i { display: flex; align-items: center; justify-content: center; width: 38.5px; height: 38.5px; border-radius: 50%; background: rgba(212, 207, 200, .08); transition: all .3s cubic-bezier(.4, 0, .2, 1); }
+.share__btn i { display: flex; align-items: center; justify-content: center; width: 38.5px; height: 38.5px; border-radius: 50%; background: rgba(var(--paper-rgb), .08); transition: all .3s cubic-bezier(.4, 0, .2, 1); }
 .share__btn svg { width: 18px; height: 18px; opacity: .6; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn span { margin-top: 9px; padding-left: .08em; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 13.5px; letter-spacing: .08em; text-transform: uppercase; opacity: .9; transition: opacity .15s cubic-bezier(.4, 0, .2, 1); }
 .share__btn:hover svg, .share__btn:hover span { opacity: 1; }
@@ -514,7 +566,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 }
 
 /* 메뉴 */
-.menu { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 80; max-width: var(--col); margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--orange); color: #000; animation: fadeIn .3s ease-in-out; }
+.menu { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 80; max-width: var(--col); margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--orange); color: var(--on-accent); animation: fadeIn .3s ease-in-out; }
 .menu__close { position: absolute; top: calc(6px + env(safe-area-inset-top, 0px)); right: 17px; }
 .menu__item { padding: 6px 18px; border: 0; background: none; font-family: var(--f-display); font-size: 22px; line-height: 1.3; font-weight: 400; letter-spacing: -0.04em; cursor: pointer; }
 /* 섹션 제목 목록: 화면이 넉넉하면 가운데, 모자라면 스크롤. 제목 아래에 작게 한국어 */
@@ -541,12 +593,12 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .lb__count { position: absolute; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; color: #bdb7ae; font-family: var(--f-caps); font-weight: 700; font-size: 11px; letter-spacing: .3em; }
 
 /* 배경음악: 위쪽 막대처럼 아래에 고정된 주황 음악 막대. 곡 제목·가수, 이전·재생/일시정지·다음, 위 가장자리에 재생 진행선 */
-.player { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-width: var(--col); margin: 0 auto; display: flex; align-items: center; height: calc(58px + env(safe-area-inset-bottom, 0px)); padding: 0 10px env(safe-area-inset-bottom, 0px) 21px; background: rgba(255, 99, 15, .95); color: #000; }
+.player { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-width: var(--col); margin: 0 auto; display: flex; align-items: center; height: calc(58px + env(safe-area-inset-bottom, 0px)); padding: 0 10px env(safe-area-inset-bottom, 0px) 21px; background: rgba(var(--accent-rgb), .95); color: var(--on-accent); }
 .player__progress { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(0, 0, 0, .12); }
-.player__progress i { display: block; width: 0; height: 100%; background: #000; transition: width .25s linear; }
+.player__progress i { display: block; width: 0; height: 100%; background: var(--on-accent); transition: width .25s linear; }
 /* 재생 중에만 움직이는 작은 막대 세 개 */
 .player__eq { display: flex; align-items: flex-end; flex: none; width: 13px; height: 13px; margin-right: 11px; }
-.player__eq i { flex: 1; height: 30%; margin-right: 2px; background: #000; border-radius: 1px; }
+.player__eq i { flex: 1; height: 30%; margin-right: 2px; background: var(--on-accent); border-radius: 1px; }
 .player__eq i:last-child { margin-right: 0; }
 .player.is-playing .player__eq i { animation: playerEq .9s ease-in-out infinite alternate; }
 .player.is-playing .player__eq i:nth-child(2) { animation-delay: -.3s; }
@@ -557,17 +609,17 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .player__title { font-family: var(--f-display); font-size: 15px; line-height: 19px; font-weight: 400; letter-spacing: -0.01em; }
 .player__artist { margin-top: 1px; font-family: var(--f-caps); font-weight: 700; font-size: 10px; line-height: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
 .player__ctrls { display: flex; align-items: center; flex: none; margin-left: 8px; }
-.player__btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: none; color: #000; cursor: pointer; }
+.player__btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--on-accent); cursor: pointer; }
 .player__btn svg { width: 16px; height: 16px; fill: currentColor; }
 /* 가운데 재생 버튼은 검은 원 */
-.player__play { width: 38px; height: 38px; margin: 0 2px; background: #000; color: var(--orange); }
+.player__play { width: 38px; height: 38px; margin: 0 2px; background: var(--on-accent); color: var(--orange); }
 .player__play svg { width: 15px; height: 15px; }
 /* 음악이 시작되기 전: 재생 버튼 둘레에 검은 고리가 은은하게 퍼진다 */
 .player__play.is-waiting { animation: playerPulse 2s ease-out infinite; }
 @keyframes playerPulse { 0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, .45); } 70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); } }
 
 /* 안내 문구 */
-.toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 110; max-width: calc(100% - 40px); padding: 10px 16px; border-radius: 999px; background: rgba(212, 207, 200, .96); color: #111; font-family: var(--f-body); font-size: 13px; line-height: 1.5; font-weight: 500; text-align: center; transform: translateX(-50%); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
+.toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 110; max-width: calc(100% - 40px); padding: 10px 16px; border-radius: 999px; background: rgba(var(--paper-rgb), .96); color: var(--on-paper); font-family: var(--f-body); font-size: 13px; line-height: 1.5; font-weight: 500; text-align: center; transform: translateX(-50%); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
 
 /* 스크롤하면 떠오르기 — 원본(더뉴챕터)과 같은 값: 섹션 단위로 30px 아래에서 2.2초 */
 .can-reveal [data-reveal] { opacity: 0; transform: translateY(30px); }
@@ -1012,8 +1064,8 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag('js', new Date());
-    // 광고용 연결(구글 신호·맞춤 광고)은 끈다
-    window.gtag('config', GA_ID, { user_id: visitorCode, allow_google_signals: false, allow_ad_personalization_signals: false });
+    // 광고용 연결(구글 신호·맞춤 광고)은 끈다. theme = 이번 방문에 나온 테마 색 (첫 페이지 조회에 함께 남는다)
+    window.gtag('config', GA_ID, { user_id: visitorCode, theme: W.themeName, allow_google_signals: false, allow_ad_personalization_signals: false });
     const s = doc.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
