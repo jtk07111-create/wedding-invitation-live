@@ -96,7 +96,8 @@ window.WEDDING = {
   ],
 
   // 미국식 축의금(Registry). 계좌 펼침 목록 아래에 별도 파트로 늘 보인다.
-  // 버튼 → 금액 고르기 → Gift it! → PayPal이 그 금액을 채운 채로 열린다 (예: paypal.me/jtk111/100USD)
+  // 버튼 → 금액 고르기 → Gift it! → PayPal이 그 금액을 채운 채로 열린다 (예: paypal.me/jtk111/100)
+  // 주소에 통화(100USD)를 붙이면 휴대폰 PayPal 앱이 금액을 비운 채 열린다. 계정 기본 통화가 USD라 숫자만 붙인다
   registry: {
     label: 'Registry',
     title: 'Honeymoon Fund',
@@ -1233,7 +1234,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   };
   function syncFund() {
     const n = fundAmount();
-    fundGift.href = n ? `${RG.paypal.replace(/\/+$/, '')}/${n}${RG.currency}` : RG.paypal;
+    fundGift.href = n ? `${RG.paypal.replace(/\/+$/, '')}/${n}` : RG.paypal;
     fundGift.setAttribute('aria-disabled', n ? 'false' : 'true');
     fundEl.querySelectorAll('.fund__amt').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.amt === n)));
     return n;
