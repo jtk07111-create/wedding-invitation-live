@@ -1531,7 +1531,12 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     // 일시정지 버튼이 남아 있지 않게, 'play'(요청)가 아니라 'playing'(소리 시작)에서 바꾼다
     let sounding = false;
     const markPlaying = on => { sounding = on; setBgmIcon(on); player.classList.toggle('is-playing', on); };
-    audio.addEventListener('playing', () => { fails = 0; markPlaying(true); });
+    // 곡이 실제로 소리 나기 시작할 때마다 한 번씩 기록한다(다음 곡으로 넘어가거나 건너뛴 곡도 포함, 일시정지 후 재개는 제외)
+    let loggedSrc = '';
+    audio.addEventListener('playing', () => {
+      fails = 0; markPlaying(true);
+      if (audio.src !== loggedSrc) { loggedSrc = audio.src; logEvent('music_play', { song: tracks[track].title }); }
+    });
     audio.addEventListener('pause', () => markPlaying(false));
     audio.addEventListener('ended', () => { if (tracks.length > 1) playNext(); });
     audio.addEventListener('timeupdate', () => {
