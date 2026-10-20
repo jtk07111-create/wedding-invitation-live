@@ -722,9 +722,6 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     <p class="party__sub" id="partyTitleEn" lang="en">RSVP for the After Party</p>
     <p class="fund__text party__info" id="partyInfo"></p>
     <label class="pf"><span class="pf__head"><span>이름 <em lang="en">Name</em></span><b>필수 · Required</b></span><span class="pf__box"><input id="pfName" name="name" autocomplete="name" maxlength="40" aria-required="true"></span></label>
-    <label class="pf"><span class="pf__head"><span>신청곡 <em lang="en">Song Request</em></span><i>선택 · Optional</i></span><span class="pf__box"><input id="pfSong" name="song" maxlength="100" autocomplete="off" placeholder="가수 - 노래 제목 / Artist - Title"></span><span class="pf__hint">배경 음악으로 틀어드려요.<br><span lang="en">We'll play it as background music.</span></span></label>
-    <label class="pf"><span class="pf__head"><span>연락처 <em lang="en">Phone</em></span><i>선택 · Optional</i></span><span class="pf__box"><input id="pfPhone" name="phone" type="tel" autocomplete="tel" maxlength="30"></span></label>
-    <label class="pf"><span class="pf__head"><span>동반 인원 <em lang="en">Guests</em></span><i>선택 · Optional</i></span><span class="pf__box pf__box--num"><input id="pfGuests" name="guests" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off"><span class="pf__unit">명</span></span><span class="pf__hint">본인을 뺀 인원 수만 숫자로 적어 주세요.<br>없으면 비워 두세요.<br><span lang="en">Not counting yourself. Leave blank if none.</span></span></label>
     <p class="fund__note" id="partyNote" role="alert"></p>
     <div class="fund__actions">
       <button type="button" class="fund__cancel" data-party="close">Cancel</button>
@@ -1277,10 +1274,8 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   const partyForm = $('#partyForm');
   const partyNote = $('#partyNote');
   const partySend = $('#partySend');
+  // 참석 의사 창은 이름만 받는다(10-21 사용자 지시. 신청곡·연락처·동반 인원 칸은 뺐고, 설문지 칸은 그대로 둔다)
   const pfName = $('#pfName');
-  const pfSong = $('#pfSong');
-  const pfPhone = $('#pfPhone');
-  const pfGuests = $('#pfGuests');
   const sendLabel = partySend.textContent;
   let partyBusy = false;
   if (partyOn) {
@@ -1288,11 +1283,6 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     $('#partyInfo').innerHTML = lines(AP.info) + (has(AP.infoEn) ? `<span lang="en">${lines(AP.infoEn)}</span>` : '');
     partyEl.addEventListener('click', e => {
       if (e.target === partyEl || e.target.closest('[data-party="close"]')) closeLayer(partyEl);
-    });
-    // 동반 인원은 숫자만 (전각 숫자도 바꿔 받는다)
-    pfGuests.addEventListener('input', () => {
-      const n = pfGuests.value.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[^0-9]/g, '').slice(0, 2);
-      if (n !== pfGuests.value) pfGuests.value = n;
     });
     pfName.addEventListener('input', () => { partyNote.textContent = ''; });
     partyForm.addEventListener('submit', e => {
@@ -1306,11 +1296,6 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       }
       const body = new URLSearchParams();
       body.append(AP.fields.name, name);
-      const song = pfSong.value.replace(/\s+/g, ' ').trim();
-      if (song && AP.fields.song) body.append(AP.fields.song, song);
-      const phone = pfPhone.value.replace(/\s+/g, ' ').trim();
-      if (phone) body.append(AP.fields.phone, phone);
-      if (pfGuests.value) body.append(AP.fields.guests, String(+pfGuests.value));
       if (AP.fields.code) body.append(AP.fields.code, visitorCode);
       partyBusy = true;
       partySend.disabled = true;
@@ -1318,7 +1303,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       partyNote.textContent = '';
       fetch(AP.form, { method: 'POST', mode: 'no-cors', credentials: 'omit', body: body })
         .then(() => {
-          logEvent('party_rsvp', { guests: +pfGuests.value || 0, song: song ? 'yes' : 'no' });
+          logEvent('party_rsvp');
           partyForm.reset();
           closeLayer(partyEl);
           toast('잘 전달됐어요. 감사합니다! · Thank you!', 3200);
