@@ -556,8 +556,13 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .mf__item { display: flex; flex-wrap: wrap; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgba(var(--paper-rgb), .12); font-size: 12.5px; line-height: 16px; }
 .mf__name { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .mf__size { flex: none; margin-left: 8px; font-family: var(--f-num); font-size: 11.5px; opacity: .7; }
-.mf__bar { flex: 0 0 100%; height: 2px; margin-top: 5px; background: rgba(var(--paper-rgb), .15); }
-.mf__bar i { display: block; width: 0; height: 100%; background: var(--orange); transition: width .2s linear; }
+.mf__bar { flex: 0 0 100%; height: 6px; margin-top: 6px; border-radius: 999px; overflow: hidden; background: rgba(var(--paper-rgb), .15); }
+.mf__bar i { display: block; width: 0; height: 100%; border-radius: 999px; background: var(--orange); transition: width .2s linear; }
+/* 전체 진행률: 목록 아래에 몇 개째인지와 전체 %를 굵은 막대로 */
+.mf__total { margin-top: 14px; text-align: left; }
+.mf__total-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; line-height: 18px; font-weight: 500; }
+.mf__total-head b { font-family: var(--f-num); font-weight: 500; }
+.mf__total .mf__bar { display: block; height: 10px; margin-top: 6px; }
 .mf__state { flex: 0 0 100%; margin-top: 3px; font-size: 11px; opacity: .8; }
 .mf__item.is-done .mf__bar i { background: #7bc67b; }
 .mf__item.is-fail .mf__state { color: var(--warn); opacity: 1; }
@@ -740,6 +745,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     <label class="pf"><span class="pf__head"><span>보내는 분 <em lang="en">Your name</em></span><i>선택 · Optional</i></span><span class="pf__box"><input id="mfName" maxlength="30" autocomplete="name"></span></label>
     <label class="mf__pick" for="mfFiles">사진·영상 고르기<span lang="en">Choose photos &amp; videos</span><input type="file" id="mfFiles" accept="image/*,video/*" multiple></label>
     <ul class="mf__list" id="mfList"></ul>
+    <div class="mf__total" id="mfTotal" hidden><div class="mf__total-head"><span id="mfTotalText"></span><b id="mfTotalPct"></b></div><span class="mf__bar"><i id="mfTotalBar"></i></span></div>
     <p class="fund__note" id="mfNote" role="alert"></p>
     <div class="fund__actions">
       <button type="button" class="fund__cancel" data-moments="close">Close</button>
@@ -1351,6 +1357,26 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     li.className = 'mf__item' + (q.state === 'done' ? ' is-done' : q.state === 'fail' ? ' is-fail' : '');
     li.querySelector('.mf__bar i').style.width = q.pct + '%';
     li.querySelector('.mf__state').textContent = q.state === 'done' ? '완료 · Done' : q.state === 'fail' ? '실패 · Failed — 다시 올리기를 눌러 주세요' : q.state === 'up' ? q.pct + '%' : '대기 · Waiting';
+    mfShowTotal();
+  }
+  // 전체 진행률: 이번에 올리는 파일들(mfBatch)에서 올라간 바이트 합 ÷ 전체 크기, 그리고 몇 개째인지
+  let mfBatch = [];
+  const mfTotal = $('#mfTotal');
+  function mfShowTotal() {
+    if (!mfBatch.length) { mfTotal.hidden = true; return; }
+    const qs = mfBatch.map(i => mfQueue[i]);
+    const size = qs.reduce((s, q) => s + q.file.size, 0);
+    const sent = qs.reduce((s, q) => s + (q.state === 'done' ? q.file.size : q.state === 'up' ? (q.bytes || 0) : 0), 0);
+    const done = qs.filter(q => q.state === 'done').length;
+    const failed = qs.filter(q => q.state === 'fail').length;
+    const finished = !qs.some(q => q.state === 'up' || q.state === 'wait');
+    const pct = finished && !failed ? 100 : Math.min(99, Math.floor(sent / size * 100));
+    mfTotal.hidden = false;
+    $('#mfTotalText').textContent = finished
+      ? `${done} / ${qs.length}개 완료 · Done` + (failed ? ` (실패 ${failed})` : '')
+      : `${Math.min(done + failed + 1, qs.length)} / ${qs.length}개 올리는 중 · Uploading`;
+    $('#mfTotalPct').textContent = pct + '%';
+    $('#mfTotalBar').style.width = pct + '%';
   }
   function mfRender() {
     mfList.innerHTML = mfQueue.map(q => `<li class="mf__item"><span class="mf__name">${esc(q.file.name)}</span><span class="mf__size">${fmtSize(q.file.size)}</span><span class="mf__bar"><i></i></span><span class="mf__state"></span></li>`).join('');
@@ -1365,6 +1391,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
       mfQueue.push({ file: f, type: type, pct: 0, state: 'wait' });
     });
     mfFiles.value = '';
+    mfBatch = [];
     mfRender();
     mfNote.textContent = skipped ? '사진·영상이 아니거나 4GB가 넘는 파일 ' + skipped + '개는 뺐어요 · Skipped ' + skipped + ' file(s)' : '';
   });
@@ -1390,7 +1417,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
   }
   async function mfUpload(i) {
     const q = mfQueue[i];
-    q.state = 'up'; q.pct = 0; mfShow(i);
+    q.state = 'up'; q.pct = 0; q.bytes = 0; mfShow(i);
     try {
       const url = await mfSession(q);
       let start = 0;
@@ -1398,7 +1425,7 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
         let tries = 0;
         for (;;) {
           try {
-            start = await mfPut(url, q, start, b => { q.pct = Math.min(99, Math.floor(b / q.file.size * 100)); mfShow(i); });
+            start = await mfPut(url, q, start, b => { q.bytes = b; q.pct = Math.min(99, Math.floor(b / q.file.size * 100)); mfShow(i); });
             break;
           } catch (err) {
             if (++tries >= 3) throw err;
@@ -1418,8 +1445,10 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
     if (!todo.length) { mfNote.textContent = '먼저 사진·영상을 골라 주세요 · Please choose photos or videos first.'; return; }
     mfBusy = true;
     mfSend.disabled = true;
-    mfSend.textContent = '올리는 중… · Uploading…';
+    mfSend.textContent = '올리는 중…';   // 영어 'Uploading'은 아래 전체 진행률 줄에 있다. 둘 다 쓰면 버튼에서 두 줄로 넘친다
     mfNote.textContent = '';
+    mfBatch = todo;
+    mfShowTotal();
     let lock = null;
     try { if (navigator.wakeLock) lock = await navigator.wakeLock.request('screen'); } catch (e) { lock = null; }   // 올리는 동안 화면이 꺼지지 않게
     for (const i of todo) await mfUpload(i);
